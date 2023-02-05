@@ -1,25 +1,22 @@
 package com.example;
 
-import java.util.Date;
-import java.util.Locale;
+import java.io.File;
+import java.io.IOException;
 
-import javax.swing.JFrame;
-
-import com.toedter.calendar.JDateChooser;
+import com.example.Data.Query;
 
 public final class App {
     private App() {
     }
 
     public static void main(String[] args) {
-        JFrame f = new JFrame("calender");
-        JDateChooser dateChooser = new JDateChooser(new Date());
-        dateChooser.setLocale(new Locale("am"));
-        dateChooser.setDateFormatString("dd/MM/yyyy");
-        f.add(dateChooser);
-        f.pack();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
+        File f = new File("icon/add.png");
+        if (f.exists()) {
+            System.out.println("eehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhe");
+        }
+       
+        Query q = new Query();
+        q.query("null");
         Home m = new Home();
         m.home();
 
