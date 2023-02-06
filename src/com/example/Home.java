@@ -80,14 +80,14 @@ public class Home {
     JMenuBar menuBar;
     JMenu menu, submenu;
     JMenuItem menuItem;
-    JRadioButtonMenuItem rdmi;
+    JMenuItem rdmi;
     JCheckBoxMenuItem cbmi;
 
     // Create the menu bar.
     menuBar = new JMenuBar();
 
     // Build the File Menu.
-    menu = new JMenu("File");
+    menu = new JMenu("Drug");
     menu.setMnemonic(KeyEvent.VK_F);
     menu.getAccessibleContext().setAccessibleDescription("Dealing with Files");
     menuBar.add(menu);
@@ -99,62 +99,54 @@ public class Home {
     Image image = icon.getImage(); // transform it
     Image newimg = image.getScaledInstance(10, 10, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
     icon = new ImageIcon(newimg); // transform it back
-    menuItem = new JMenuItem("New Project...",icon);
+    menuItem = new JMenuItem("New Drug.",icon);
     menuItem.setMnemonic(KeyEvent.VK_P);
     menuItem.setAccelerator(KeyStroke.getKeyStroke(
         KeyEvent.VK_1, ActionEvent.ALT_MASK));
     menuItem.getAccessibleContext().setAccessibleDescription(
-        "New Project");
+        "New Drug");
     menu.add(menuItem);
 
-    menuItem = new JMenuItem("New File...",
+    menuItem = new JMenuItem("Add Drug",
         new ImageIcon("images/newfile.png"));
     menuItem.setMnemonic(KeyEvent.VK_F);
     menu.add(menuItem);
 
-    // a group of check box menu items
-    menu.addSeparator();
-    cbmi = new JCheckBoxMenuItem("A check box menu item");
-    cbmi.setMnemonic(KeyEvent.VK_C);
-    menu.add(cbmi);
-
-    cbmi = new JCheckBoxMenuItem("Another one");
-    cbmi.setMnemonic(KeyEvent.VK_H);
-    menu.add(cbmi);
+    
 
     // a group of radio button menu items
     menu.addSeparator();
     ButtonGroup group = new ButtonGroup();
-    rdmi = new JRadioButtonMenuItem("Radio button menu item");
-    rdmi.setSelected(true);
+    rdmi = new JMenuItem("Remove Drug",icon);
+    
     rdmi.setMnemonic(KeyEvent.VK_R);
     group.add(rdmi);
     menu.add(rdmi);
 
-    rdmi = new JRadioButtonMenuItem("Another radio button");
+    rdmi = new JRadioButtonMenuItem("update Drug");
     rdmi.setMnemonic(KeyEvent.VK_O);
     group.add(rdmi);
     menu.add(rdmi);
 
     // a submenu
     menu.addSeparator();
-    submenu = new JMenu("A submenu");
+    submenu = new JMenu("Null 0");
     submenu.setMnemonic(KeyEvent.VK_S);
 
-    menuItem = new JMenuItem("Menu item in the submenu");
+    menuItem = new JMenuItem("Null 1");
     menuItem.setAccelerator(KeyStroke.getKeyStroke(
         KeyEvent.VK_2, ActionEvent.ALT_MASK));
     submenu.add(menuItem);
 
-    menuItem = new JMenuItem("Another menu item");
+    menuItem = new JMenuItem("Null 2");
     submenu.add(menuItem);
     menu.add(submenu);
 
     // Build Edit menu in the menu bar.
-    menu = new JMenu("Edit");
+    menu = new JMenu("exit");
     menu.setMnemonic(KeyEvent.VK_E);
     menu.getAccessibleContext().setAccessibleDescription(
-        "Edit Menu");
+        "Exit");
     menuBar.add(menu);
     return menuBar;
 
