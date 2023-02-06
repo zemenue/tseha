@@ -12,7 +12,7 @@ public final class App {
     public static void main(String[] args) {
         File f = new File("icon/add.png");
         if (f.exists()) {
-            System.out.println("eehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhe");
+           // System.out.println("eehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhe");
         }
        
         Query q = new Query();
