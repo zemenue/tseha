@@ -47,7 +47,6 @@ public class Query {
     }
     return ls;
   }
-
   public int query_none(String query) {
     try {
       conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/inventory", "root", "P@$$w0rd");

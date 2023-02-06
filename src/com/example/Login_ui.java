@@ -13,26 +13,21 @@ import javax.swing.JTextField;
 import com.example.Logic.Login;
 
 public class Login_ui {
-
+  JFrame login_JFrame = new JFrame("Login");
   public void login() {
-
     JFrame.setDefaultLookAndFeelDecorated(true);
-    JFrame login = new JFrame("Login");
-
-    login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    login_JFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     // Define the panel to hold the buttons
     JPanel panel = new JPanel();
-
-    login.add(panel);
+    login_JFrame.add(panel);
     placeComponents(panel);
-    login.pack();
-    login.setSize(420, 250);
-    login.setLocation(500, 500);
-    login.setVisible(true);
+    login_JFrame.pack();
+    login_JFrame.setSize(420, 250);
+    login_JFrame.setLocation(500, 500);
+    login_JFrame.setVisible(true);
   }
 
-  private static void placeComponents(JPanel panel) {
+  private void placeComponents(JPanel panel) {
     int m = 50;
     panel.setLayout(null);
     ///////////////// ----------------/////////////
@@ -59,24 +54,22 @@ public class Login_ui {
     JButton loginButton = new JButton("Login");
     loginButton.setBounds(170, 120 + m, 80, 25);
     loginButton.addActionListener(new ActionListener() {
-      int count = 0;
-
+     
       @Override
       public void actionPerformed(ActionEvent e) {
-        message.setText(String.valueOf(passwordText.getPassword()));
-
         Login login = new Login();
         int res = login.login(userText.getText(), String.valueOf(passwordText.getPassword()));
+        Home m = new Home();
         if (res == 1) {
-          Home m = new Home();
           m.home();
-         System.out.println("log in");
-        } else {
+          login_JFrame.dispose();
+        } else if (res == 0) {
           message.setText("Username or password error");
         }
-
+        else {
+          message.setText("Server Error.");
+        }
       }
-
     });
     panel.add(loginButton);
     /////////////// -----------/////////////
