@@ -10,20 +10,15 @@ public final class App {
     }
 
     public static void main(String[] args) {
-        File f = new File("icon/add.png");
-        if (f.exists()) {
-           // System.out.println("eehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhe");
-        }
        
-        Query q = new Query();
-        q.query("null");
-        Home m = new Home();
-        m.home();
+      /*   Home m = new Home();
+        m.home(); */
 
-        /*
-         * Login l = new Login();
-         * l.login();
-         */
+        
+          Login_ui l = new Login_ui();
+          l.login();
+         
+        
 
     }
 

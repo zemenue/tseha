@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Login {
+import com.example.Logic.Login;
+
+public class Login_ui {
 
   public void login() {
 
@@ -35,7 +37,7 @@ public class Login {
     panel.setLayout(null);
     ///////////////// ----------------/////////////
     JLabel message = new JLabel("Message");
-    message.setBounds(150, 10 + m, 200, 25);
+    message.setBounds(100, 10 + m, 300, 25);
     panel.add(message);
     ///////////////// --------------/////////////
     JLabel userLabel = new JLabel("Username");
@@ -61,8 +63,17 @@ public class Login {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        count = count + 1;
-        message.setText("login clicked: " + count);
+        message.setText(String.valueOf(passwordText.getPassword()));
+
+        Login login = new Login();
+        int res = login.login(userText.getText(), String.valueOf(passwordText.getPassword()));
+        if (res == 1) {
+          Home m = new Home();
+          m.home();
+         System.out.println("log in");
+        } else {
+          message.setText("Username or password error");
+        }
 
       }
 
@@ -71,6 +82,13 @@ public class Login {
     /////////////// -----------/////////////
     JButton cancel = new JButton("Cancel");
     cancel.setBounds(260, 120 + m, 90, 25);
+    cancel.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        System.exit(0);
+
+      }
+    });
     panel.add(cancel);
   }
 }
