@@ -5,11 +5,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -17,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
@@ -24,9 +23,20 @@ import javax.swing.KeyStroke;
 import com.example.Drug.Add_drug;
 
 public class Home {
+
+  public int id;
+  public String Username;
+
+  public Home(int id, String username) {
+    this.id = id;
+    this.Username = username;
+  }
+
   public void home() {
+    
+
     Add_drug drug = new Add_drug();
-    JFrame frame = new JFrame();
+    JFrame frame = new JFrame("Drug Store Inventory Managment System - " + Username);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     JDesktopPane desktopPane = new JDesktopPane();
     JInternalFrame register = new JInternalFrame("Register user", true, true, true, true);
@@ -81,8 +91,6 @@ public class Home {
     JMenu menu, submenu;
     JMenuItem menuItem;
     JMenuItem rdmi;
-    JCheckBoxMenuItem cbmi;
-
     // Create the menu bar.
     menuBar = new JMenuBar();
 
@@ -93,13 +101,12 @@ public class Home {
     menuBar.add(menu);
 
     // a group of JMenuItems
-    
-   
+
     ImageIcon icon = new ImageIcon("icon/add.png");
     Image image = icon.getImage(); // transform it
     Image newimg = image.getScaledInstance(10, 10, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
     icon = new ImageIcon(newimg); // transform it back
-    menuItem = new JMenuItem("New Drug.",icon);
+    menuItem = new JMenuItem("New Drug.", icon);
     menuItem.setMnemonic(KeyEvent.VK_P);
     menuItem.setAccelerator(KeyStroke.getKeyStroke(
         KeyEvent.VK_1, ActionEvent.ALT_MASK));
@@ -112,13 +119,11 @@ public class Home {
     menuItem.setMnemonic(KeyEvent.VK_F);
     menu.add(menuItem);
 
-    
-
     // a group of radio button menu items
     menu.addSeparator();
     ButtonGroup group = new ButtonGroup();
-    rdmi = new JMenuItem("Remove Drug",icon);
-    
+    rdmi = new JMenuItem("Remove Drug", icon);
+
     rdmi.setMnemonic(KeyEvent.VK_R);
     group.add(rdmi);
     menu.add(rdmi);

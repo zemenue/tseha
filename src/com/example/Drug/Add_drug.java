@@ -27,7 +27,7 @@ public class Add_drug {
     p_container.setLayout(new BorderLayout());
     JPanel p_form = new JPanel();
     p_form.setLayout(null);
-    //p_form.setBackground(Color.BLACK);
+    // p_form.setBackground(Color.BLACK);
     JPanel P_table = new JPanel();
     P_table.setLayout(new GridLayout());
     ///////////////// ----------------/////////////
@@ -85,7 +85,24 @@ public class Add_drug {
     ////////////////////////////// table//////////////////////////////////////
     String[][] data = {
         { "Panadol", "P002", "25,8,2024" },
-        { "Paracitamole", "P001", "25,8,2023" }
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+        { "Paracitamole", "P001", "25,8,2023" }, { "Panadol", "P002", "25,8,2024" },
+
     };
     String[] columnNames = { "Drug Name ", "Drug Code ", "Expire Date " };
     JTable table = new JTable(data, columnNames);

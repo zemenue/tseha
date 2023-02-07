@@ -1,10 +1,5 @@
 package com.example;
 
-import java.io.File;
-import java.io.IOException;
-
-import com.example.Data.Query;
-
 public final class App {
     private App() {
     }
