@@ -15,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
@@ -33,7 +32,6 @@ public class Home {
   }
 
   public void home() {
-    
 
     Add_drug drug = new Add_drug();
     JFrame frame = new JFrame("Drug Store Inventory Managment System - " + Username);
@@ -93,7 +91,7 @@ public class Home {
     JMenuItem rdmi;
     // Create the menu bar.
     menuBar = new JMenuBar();
-
+    /////////////////////////////////////////////////////////////////////////////////////////
     // Build the File Menu.
     menu = new JMenu("Drug");
     menu.setMnemonic(KeyEvent.VK_F);
@@ -147,12 +145,79 @@ public class Home {
     submenu.add(menuItem);
     menu.add(submenu);
 
-    // Build Edit menu in the menu bar.
-    menu = new JMenu("exit");
-    menu.setMnemonic(KeyEvent.VK_E);
-    menu.getAccessibleContext().setAccessibleDescription(
-        "Exit");
+    ////////////////////////////////////////////////////////
+    menu = new JMenu("Store");
+    menu.setMnemonic(KeyEvent.VK_F);
+    menu.getAccessibleContext().setAccessibleDescription("Dealing with Files");
     menuBar.add(menu);
+
+    icon = new ImageIcon(newimg); // transform it back
+    menuItem = new JMenuItem("New Drug.", icon);
+    menuItem.setMnemonic(KeyEvent.VK_P);
+    menuItem.setAccelerator(KeyStroke.getKeyStroke(
+        KeyEvent.VK_1, ActionEvent.ALT_MASK));
+    menuItem.getAccessibleContext().setAccessibleDescription(
+        "New Drug");
+    menu.add(menuItem);
+    ////////////////////////////////////////////////////////
+    menu = new JMenu("Report");
+    menu.setMnemonic(KeyEvent.VK_F);
+    menu.getAccessibleContext().setAccessibleDescription("Dealing with Files");
+    menuBar.add(menu);
+
+    icon = new ImageIcon(newimg); // transform it back
+    menuItem = new JMenuItem("New Drug.", icon);
+    menuItem.setMnemonic(KeyEvent.VK_P);
+    menuItem.setAccelerator(KeyStroke.getKeyStroke(
+        KeyEvent.VK_1, ActionEvent.ALT_MASK));
+    menuItem.getAccessibleContext().setAccessibleDescription(
+        "New Drug");
+    menu.add(menuItem);
+    ////////////////////////////////////////////////////////
+    menu = new JMenu("Settings");
+    menu.setMnemonic(KeyEvent.VK_F);
+    menu.getAccessibleContext().setAccessibleDescription("Dealing with Files");
+    menuBar.add(menu);
+
+    icon = new ImageIcon(newimg); // transform it back
+    menuItem = new JMenuItem("New Drug.", icon);
+    menuItem.setMnemonic(KeyEvent.VK_P);
+    menuItem.setAccelerator(KeyStroke.getKeyStroke(
+        KeyEvent.VK_1, ActionEvent.ALT_MASK));
+    menuItem.getAccessibleContext().setAccessibleDescription(
+        "New Drug");
+    menu.add(menuItem);
+    ////////////////////////////////////////////////////////
+    menu = new JMenu("About");
+    menu.setMnemonic(KeyEvent.VK_F);
+    menu.getAccessibleContext().setAccessibleDescription("Dealing with Files");
+    menuBar.add(menu);
+
+    icon = new ImageIcon(newimg); // transform it back
+    menuItem = new JMenuItem("New Drug.", icon);
+    menuItem.setMnemonic(KeyEvent.VK_P);
+    menuItem.setAccelerator(KeyStroke.getKeyStroke(
+        KeyEvent.VK_1, ActionEvent.ALT_MASK));
+    menuItem.getAccessibleContext().setAccessibleDescription(
+        "New Drug");
+    menu.add(menuItem);
+    ////////////////////////////////////////////////////////
+    menu = new JMenu("Help");
+    menu.setMnemonic(KeyEvent.VK_F);
+    menu.getAccessibleContext().setAccessibleDescription("Dealing with Files");
+    menuBar.add(menu);
+
+    icon = new ImageIcon(newimg); // transform it back
+    menuItem = new JMenuItem("New Drug.", icon);
+    menuItem.setMnemonic(KeyEvent.VK_P);
+    menuItem.setAccelerator(KeyStroke.getKeyStroke(
+        KeyEvent.VK_1, ActionEvent.ALT_MASK));
+    menuItem.getAccessibleContext().setAccessibleDescription(
+        "New Drug");
+    menu.add(menuItem);
+    //////////////////////////////////////////////////////////////////////
+    // Build Edit menu in the menu bar.
+    
     return menuBar;
 
   }
