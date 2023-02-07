@@ -1,6 +1,8 @@
 package com.example.Drug;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.Date;
@@ -27,7 +29,6 @@ public class Add_drug {
     int txt_height = 27;
     p_container.setLayout(new BorderLayout());
     JPanel p_form = new JPanel();
-    p_form.setLayout(null);
     JPanel P_table = new JPanel();
     P_table.setLayout(new GridLayout());
     ///////////////// ----------------/////////////
@@ -124,18 +125,28 @@ public class Add_drug {
     JPanel form_container = new JPanel();
     p_form.setLayout(null);
     p_form1.setLayout(null);
-    form_container.setLayout(null);
+    p_form.setSize(500, 500);
+    
+    // form_container.setLayout(new FlowLayout());
+
+    p_form.setBackground(Color.GRAY);
+    p_form1.setBackground(Color.GRAY);
+
+    form_container.setBackground(Color.ORANGE);
+
     form_container.add(p_form);
     form_container.add(p_form1);
+    form_container.setLayout(new GridLayout());
     // scroll_container.setLayout(new FlowLayout());
     // p_form.setLayout(new FlowLayout());
+
     JScrollPane scroll = new JScrollPane(form_container);
     scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     scroll_container.add(scroll);
 
     ///////////////////////////////////////////////////////////////////////////
-    p_container.add(p_form, BorderLayout.CENTER);
-    p_container.add(P_table, BorderLayout.SOUTH);
+    p_container.add(form_container, BorderLayout.CENTER);
+    // p_container.add(P_table, BorderLayout.SOUTH);
   }
 }

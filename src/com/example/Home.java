@@ -1,6 +1,8 @@
 package com.example;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +24,7 @@ import javax.swing.KeyStroke;
 import com.example.Drug.Add_drug;
 
 public class Home {
-
+  Font font = new Font("SansSerif", Font.BOLD, 14);
   public int id;
   public String Username;
 
@@ -74,10 +76,17 @@ public class Home {
     m.add(m_exit);
     mbar.add(m);
     /////////////////// end menu///////////////
+    JPanel footer = new JPanel();
+    footer.setLayout(new BorderLayout());
+    JLabel footer_text = new JLabel("Server: Connected");
+    footer_text.setFont(font);
+    footer.add(footer_text, BorderLayout.EAST);
+
     register.setVisible(true);
     desktopPane.add(register);
     frame.setJMenuBar(createMenuBar());
     frame.add(desktopPane, BorderLayout.CENTER);
+    frame.add(footer, BorderLayout.PAGE_END);
     frame.setSize(1000, 800);
     frame.setVisible(true);
 
@@ -217,7 +226,7 @@ public class Home {
     menu.add(menuItem);
     //////////////////////////////////////////////////////////////////////
     // Build Edit menu in the menu bar.
-    
+
     return menuBar;
 
   }
