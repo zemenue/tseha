@@ -1,7 +1,6 @@
 package com.example;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -39,7 +38,7 @@ public class Home {
     JFrame frame = new JFrame("Drug Store Inventory Managment System - " + Username);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     JDesktopPane desktopPane = new JDesktopPane();
-    JInternalFrame register = new JInternalFrame("Register user", true, true, true, true);
+    JInternalFrame register = new JInternalFrame("Register Drug", true, true, true, true);
 
     register.setBounds(10, 10, 900, 700);
     JLabel label = new JLabel(register.getTitle(), JLabel.CENTER);
