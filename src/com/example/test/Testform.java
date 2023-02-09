@@ -1,36 +1,50 @@
 package com.example.test;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.example.test.print.print;
 
 public class Testform {
 
-  public static void testform() {
-    int width = 200;
-    int height = 200;
-    Font font = new Font("SansSerif", Font.BOLD, 14);
-    int m = 0;
-    int txt_width = 260;
-    int txt_height = 27;
-    JFrame form = new JFrame();
-    JFileChooser f = new JFileChooser();
+  public static void filechooser() {
+    // int width = 200;
+    // int height = 200;
+    // Font font = new Font("SansSerif", Font.BOLD, 14);
+    // int m = 0;
+    // int txt_width = 260;
+    // int txt_height = 27;
+    JFileChooser fileopen = new JFileChooser();
+    FileFilter filter = new FileNameExtensionFilter("Scanned Files", "jpg", "jpeg", "Pdf", "Png");
+    fileopen.addChoosableFileFilter(filter);
 
+    int ret = fileopen.showDialog(null, "Open file");
 
-    form.add(f);
-    form.pack();
-    form.setSize(1000, 800);
-    form.setVisible(true);
+    if (ret == JFileChooser.APPROVE_OPTION) {
+      File file = fileopen.getSelectedFile();
+      System.out.println(file);
+    }
+    if (ret == JFileChooser.CANCEL_OPTION) {
+      System.out.println("cancel");
+
+    }
+    if (ret == JFileChooser.ERROR) {
+      System.out.println("Error");
+    }
   }
 
   public static void main(String[] args) {
-    testform();
+    print print = new print();
+    JPanel p = new JPanel();
+    JFrame frame = new JFrame();
+    p.setBounds(10, 10, 500, 400);
+    p.setBackground(Color.GRAY);
+    print.printComponenet(p);
   }
 }

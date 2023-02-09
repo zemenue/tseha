@@ -10,7 +10,6 @@ import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -135,10 +134,15 @@ public class Add_drug {
     invattJLabel.setBounds(10, 290 + m, 200, 25);
     p_form.add(invattJLabel);
 
-    JFileChooser invoice_att = new JFileChooser();
-    invoice_att.setBounds(10, 315 + m, txt_width, txt_height);
+    JTextField invoice_att = new JTextField();
+    invoice_att.setBounds(10, 315 + m, 163, txt_height);
     invoice_att.setFont(font);
     p_form.add(invoice_att);
+
+    JButton Browse = new JButton("Browse");
+    Browse.setBounds(173, 315 + m, 98, txt_height);
+    Browse.setFont(font);
+    p_form.add(Browse);
     /////
     /////
     JLabel sellJLabel = new JLabel("Sell Price (Birr)");
@@ -154,7 +158,9 @@ public class Add_drug {
     JLabel category_JLabel = new JLabel("Category");
     category_JLabel.setBounds(10, 10 + m, 200, 25);
     p_form1.add(category_JLabel);
-    JTextField catagory = new JTextField(100);
+    JComboBox catagory = new JComboBox();
+    catagory.addItem("ras mitat");
+    catagory.addItem("neger");
     catagory.setBounds(10, 35 + m, txt_width, txt_height);
     catagory.setFont(font);
     p_form1.add(catagory);
@@ -227,7 +233,9 @@ public class Add_drug {
     unitJLabel.setBounds(10, 175 + m, txt_width, 25);
     p_form1.add(unitJLabel);
 
-    JTextField unit = new JTextField(20);
+    JComboBox unit = new JComboBox();
+    unit.addItem("Tablet");
+    unit.addItem("bottle");
     unit.setBounds(10, 200 + m, txt_width, txt_height);
     unit.setFont(font);
     p_form1.add(unit);
@@ -264,7 +272,9 @@ public class Add_drug {
     JLabel dossagelJLabel = new JLabel("Dossage");
     dossagelJLabel.setBounds(300, 230 + m, 200, 25);
     p_form1.add(dossagelJLabel);
-    JTextField Dossage = new JTextField(100);
+    JComboBox Dossage = new JComboBox();
+    Dossage.addItem("Tablet");
+    Dossage.addItem("Gel");
     Dossage.setBounds(300, 255 + m, txt_width, txt_height);
     Dossage.setFont(font);
     p_form1.add(Dossage);
@@ -273,7 +283,9 @@ public class Add_drug {
     JLabel strengthlJLabel = new JLabel("Strength");
     strengthlJLabel.setBounds(10, 290 + m, 200, 25);
     p_form1.add(strengthlJLabel);
-    JTextField strength = new JTextField(100);
+    JComboBox strength = new JComboBox();
+    strength.addItem("mg");
+    strength.addItem("ml");
     strength.setBounds(10, 315 + m, txt_width, txt_height);
     strength.setFont(font);
     p_form1.add(strength);
