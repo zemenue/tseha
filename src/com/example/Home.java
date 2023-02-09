@@ -92,7 +92,7 @@ public class Home {
     try {
       register.setMaximum(true);
     } catch (PropertyVetoException e1) {
-      // TODO Auto-generated catch block
+      
       System.out.println(e1.getMessage());
     }
     frame.setSize(1000, 800);
