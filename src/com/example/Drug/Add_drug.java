@@ -6,10 +6,15 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,6 +22,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -27,6 +34,86 @@ public class Add_drug {
   }
 
   public void placeComponents(JPanel p_container) {
+    String[] countries = new String[] { "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola",
+        "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria",
+        "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin",
+        "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil",
+        "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia",
+        "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China",
+        "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo",
+        "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)",
+        "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor",
+        "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia",
+        "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "France Metropolitan",
+        "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany",
+        "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea",
+        "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Holy See (Vatican City State)", "Honduras",
+        "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland",
+        "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati",
+        "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan",
+        "Lao, People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya",
+        "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia, The Former Yugoslav Republic of", "Madagascar",
+        "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius",
+        "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia",
+        "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands",
+        "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue",
+        "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama",
+        "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar",
+        "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia",
+        "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal",
+        "Seychelles", "Sierra Leone", "Singapore", "Slovakia (Slovak Republic)", "Slovenia", "Solomon Islands",
+        "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "Spain", "Sri Lanka", "St. Helena",
+        "St. Pierre and Miquelon", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", "Swaziland", "Sweden",
+        "Switzerland", "Syrian Arab Republic", "Taiwan, Province of China", "Tajikistan",
+        "Tanzania, United Republic of", "Thailand", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia",
+        "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates",
+        "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu",
+        "Venezuela", "Vietnam", "Virgin Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna Islands",
+        "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe", "Palestine" };
+    String[] unitlist = new String[] {
+        "Kg",
+        "g",
+        "mg",
+        "mcg",
+        "L",
+        "ml",
+        "cc",
+        "mol",
+        "mmol"
+    };
+    String[] primarypacklist = new String[] {
+        "vial",
+        "Bottle",
+        "sachet",
+        "Syringe",
+        "Ampoule"
+    };
+    String[] dosagelist = new String[] {
+        "Powder",
+        "Tablet",
+        "Capsule",
+        "Solution",
+        "Suspension",
+        "Emulsion",
+        "Syrup",
+        "Elixir",
+        "Magma",
+        "Gel",
+        "Cachet",
+        "Pill",
+        "Ointment",
+        "Cream",
+        "Paste",
+        "Lotion",
+        "Plaster",
+        "Suppositorie",
+        "Enema",
+        "Douche",
+        "Spray",
+        "Inhalation",
+        "Lozenge",
+    };
+
     Font font = new Font("SansSerif", Font.BOLD, 14);
     int m = 0;
     int txt_width = 260;
@@ -106,7 +193,10 @@ public class Add_drug {
     p_form.add(origin);
 
     JComboBox D_origin = new JComboBox();
-    D_origin.addItem("Ethiopia");
+    for (String counry : countries) {
+      D_origin.addItem(counry.toString());
+    }
+
     D_origin.setBounds(300, 200 + m, txt_width, txt_height);
     D_origin.setFont(font);
     p_form.add(D_origin);
@@ -142,6 +232,32 @@ public class Add_drug {
     JButton Browse = new JButton("Browse");
     Browse.setBounds(173, 315 + m, 98, txt_height);
     Browse.setFont(font);
+    Browse.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        ////////////////// file chooser///////////////////////
+        JFileChooser fileopen = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("Scanned Files", "jpg", "jpeg", "Pdf", "Png");
+        fileopen.addChoosableFileFilter(filter);
+
+        int ret = fileopen.showDialog(null, "Open file");
+
+        if (ret == JFileChooser.APPROVE_OPTION) {
+          File file = fileopen.getSelectedFile();
+          invoice_att.setText(file.toString());
+
+        }
+        if (ret == JFileChooser.CANCEL_OPTION) {
+
+        }
+        if (ret == JFileChooser.ERROR) {
+          System.out.println("Error");
+        }
+        ////////////////////////////////////////////////////////////////
+
+      }
+    });
     p_form.add(Browse);
     /////
     /////
@@ -229,14 +345,29 @@ public class Add_drug {
     quantity_per_pack.setFont(font);
     p_form1.add(quantity_per_pack);
     ////
+    JLabel ppackJLabel = new JLabel("Primary pack.");
+    ppackJLabel.setBounds(10, 175 + m, 120, 25);
+    p_form1.add(ppackJLabel);
+    Arrays.sort(primarypacklist);
+    JComboBox primary_pack = new JComboBox();
+    for (String p_pack : primarypacklist) {
+      primary_pack.addItem(p_pack);
+    }
+
+    primary_pack.setBounds(10, 200 + m, 120, txt_height);
+    primary_pack.setFont(font);
+    p_form1.add(primary_pack);
+
     JLabel unitJLabel = new JLabel("Drug Unit");
-    unitJLabel.setBounds(10, 175 + m, txt_width, 25);
+    unitJLabel.setBounds(150, 175 + m, 120, 25);
     p_form1.add(unitJLabel);
 
     JComboBox unit = new JComboBox();
-    unit.addItem("Tablet");
-    unit.addItem("bottle");
-    unit.setBounds(10, 200 + m, txt_width, txt_height);
+    for (String unitlst : unitlist) {
+      unit.addItem(unitlst);
+    }
+
+    unit.setBounds(150, 200 + m, 120, txt_height);
     unit.setFont(font);
     p_form1.add(unit);
 
@@ -269,12 +400,15 @@ public class Add_drug {
     p_form1.add(light);
     // /////
 
-    JLabel dossagelJLabel = new JLabel("Dossage");
+    JLabel dossagelJLabel = new JLabel("Dossage Form");
     dossagelJLabel.setBounds(300, 230 + m, 200, 25);
     p_form1.add(dossagelJLabel);
     JComboBox Dossage = new JComboBox();
-    Dossage.addItem("Tablet");
-    Dossage.addItem("Gel");
+    Arrays.sort(dosagelist);
+    for (String dosg : dosagelist) {
+      Dossage.addItem(dosg);
+    }
+
     Dossage.setBounds(300, 255 + m, txt_width, txt_height);
     Dossage.setFont(font);
     p_form1.add(Dossage);
@@ -335,6 +469,7 @@ public class Add_drug {
     sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
     P_table.add(sp);
     //// -----------------------------------------------------------------///////////////////////////
+
     TitledBorder border = new TitledBorder(".");
     border.setTitleJustification(TitledBorder.CENTER);
     border.setTitlePosition(TitledBorder.TOP);
