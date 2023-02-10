@@ -75,10 +75,10 @@ public class Login_ui {
             username = resultSet.getString("username").trim();
 
           }
-          Home m = new Home(uid, username);
-          if (res == 1) {
 
-            m.home();
+          if (res == 1) {
+            Home m = new Home(uid, username);
+
             login_JFrame.dispose();
           } else if (res == 0) {
             message.setText("Username or password error");
