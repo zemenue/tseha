@@ -65,25 +65,25 @@ public class Login_ui {
         Login login = new Login();
 
         try {
-          int res = login.login(userText.getText(), String.valueOf(passwordText.getPassword()));
-          ResultSet resultSet = q.retrieveData("select * from users where username='admin'");
+          ResultSet res = login.login(userText.getText(), String.valueOf(passwordText.getPassword()));
+         // ResultSet resultSet = q.retrieveData("select * from users where username='admin'");
 
           int uid = 0;
           String username = null;
-          while (resultSet.next()) {
-            uid = resultSet.getInt("uid");
-            username = resultSet.getString("username").trim();
+          int count=0;
+          while (res.next()) {
+            count=count+1;
+            uid = res.getInt("uid");
+            username = res.getString("username").trim();
 
           }
 
-          if (res == 1) {
+          if (count >= 1) {
             Home m = new Home(uid, username);
 
             login_JFrame.dispose();
-          } else if (res == 0) {
+          } else if (count <= 0) {
             message.setText("Username or password error");
-          } else {
-            message.setText("Server Error.");
           }
         } catch (SQLException e1) {
           // TODO Auto-generated catch block

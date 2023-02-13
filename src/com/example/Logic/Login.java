@@ -2,11 +2,19 @@ package com.example.Logic;
 
 import com.example.Data.Query;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Login {
-  public int login(String username, String password) {
+  public ResultSet login(String username, String password) {
     Query q = new Query();
-    int response = q
-        .query_none("SELECT * FROM users WHERE username='" + username + "' And password='" + password + "'");
+    ResultSet response;
+    try {
+      response = q
+          .retrieveData("SELECT * FROM users WHERE username='" + username + "' And password='" + password + "'");
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     return response;
   }
 

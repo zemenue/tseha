@@ -1,6 +1,7 @@
 package com.example;
 
 import com.example.Drug.Add_drug;
+import com.example.users.Manage_user;
 
 import javax.swing.*;
 import java.awt.*;
@@ -170,13 +171,43 @@ public class Home {
         menuBar.add(menu);
 
         icon = new ImageIcon(newimg); // transform it back
-        menuItem = new JMenuItem("New Drug.", icon);
+        menuItem = new JMenuItem("Server Settings", icon);
         menuItem.setMnemonic(KeyEvent.VK_P);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "New Drug");
         menu.add(menuItem);
+        // a submenu
+        menu.addSeparator();
+        submenu = new JMenu("Manage Users");
+        submenu.setMnemonic(KeyEvent.VK_S);
+
+        menuItem = new JMenuItem("Add Users");
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_2, ActionEvent.ALT_MASK));
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Manage_user user=new Manage_user();
+                JInternalFrame internal=user.add_user();
+                if (internal.getParent() == null) {
+                    internal.setVisible(true);
+
+                    desktopPane.add(internal);
+                }
+            }
+        });
+        submenu.add(menuItem);
+
+        menuItem = new JMenuItem("Reset Password");
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_2, ActionEvent.ALT_MASK));
+        submenu.add(menuItem);
+
+        menuItem = new JMenuItem("Manage Role");
+        submenu.add(menuItem);
+        menu.add(submenu);
         ////////////////////////////////////////////////////////
         menu = new JMenu("About");
         menu.setMnemonic(KeyEvent.VK_F);
