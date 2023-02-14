@@ -139,12 +139,11 @@ public class Home {
 
         ////////////////////////////////////////////////////////
         menu = new JMenu("Store");
-        menu.setMnemonic(KeyEvent.VK_F);
-        menu.getAccessibleContext().setAccessibleDescription("Dealing with Files");
+
         menuBar.add(menu);
 
         icon = new ImageIcon(newimg); // transform it back
-        menuItem = new JMenuItem("New Drug.", icon);
+        menuItem = new JMenuItem("Shelf", icon);
         menuItem.setMnemonic(KeyEvent.VK_P);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
