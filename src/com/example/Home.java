@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyVetoException;
+import java.sql.SQLException;
 
 public class Home {
     public int id;
@@ -18,7 +19,7 @@ public class Home {
     JFrame frame = new JFrame();
     JInternalFrame register = new JInternalFrame("Register Drug", true, true, true, true);
 
-    public Home(int id, String username) {
+    public Home(int id, String username) throws SQLException {
         this.id = id;
         this.Username = username;
         Add_drug drug = new Add_drug();
@@ -111,13 +112,13 @@ public class Home {
         // a group of radio button menu items
         menu.addSeparator();
         ButtonGroup group = new ButtonGroup();
-        rdmi = new JMenuItem("Remove Drug", icon);
+        JMenuItem  category = new JMenuItem("Classification", icon);
 
-        rdmi.setMnemonic(KeyEvent.VK_R);
-        group.add(rdmi);
-        menu.add(rdmi);
+        category.setMnemonic(KeyEvent.VK_R);
+        group.add(category);
+        menu.add(category);
 
-        rdmi = new JRadioButtonMenuItem("update Drug");
+        rdmi = new JMenuItem("Category");
         rdmi.setMnemonic(KeyEvent.VK_O);
         group.add(rdmi);
         menu.add(rdmi);

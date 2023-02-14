@@ -1,5 +1,7 @@
 package com.example.functions;
 
+import com.example.Data.Query;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -22,5 +24,11 @@ public class Functions {
       results.add(row);
     }
     return results;
+  }
+
+  public  ResultSet refresh_table() throws SQLException {
+    Query query=new Query();
+    return query.retrieveData(" SELECT * FROM Drug");
+
   }
 }

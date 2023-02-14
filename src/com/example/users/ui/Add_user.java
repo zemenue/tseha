@@ -1,15 +1,16 @@
 package com.example.users.ui;
 
 import com.example.Data.Query;
+import com.example.users.Manage_user;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Arrays;
 
 public class Add_user {
+    //Manage_user manage_user = new Manage_user();
     Font font = new Font("SansSerif", Font.BOLD, 14);
     JInternalFrame adduser = new JInternalFrame("Register Drug", false, true, false, true);
     Query q;
@@ -34,7 +35,7 @@ public class Add_user {
         placeComponents(panel);
         adduser.pack();
         adduser.setSize(600, 400);
-       // adduser.setResizable(false);
+        // adduser.setResizable(false);
         // adduser.setLocation(500, 500);
         adduser.setVisible(true);
         return adduser;
@@ -66,10 +67,10 @@ public class Add_user {
         JLabel message = new JLabel("Full Name");
         message.setBounds(10, 10 + m, 500, 30);
         p_form.add(message);
-        JTextField drug_name = new JTextField(100);
-        drug_name.setBounds(10, 35 + m, 550, 27);
-        drug_name.setFont(font);
-        p_form.add(drug_name);
+        JTextField fname = new JTextField(100);
+        fname.setBounds(10, 35 + m, 550, 27);
+        fname.setFont(font);
+        p_form.add(fname);
         ///////
 
         ///////
@@ -77,20 +78,20 @@ public class Add_user {
         passwordLabel.setBounds(10, 65 + m, 200, 25);
         p_form.add(passwordLabel);
 
-        JTextField drug_code = new JTextField(20);
-        drug_code.setBounds(10, 90 + m, txt_width, txt_height);
-        drug_code.setFont(font);
-        p_form.add(drug_code);
+        JTextField username = new JTextField(20);
+        username.setBounds(10, 90 + m, txt_width, txt_height);
+        username.setFont(font);
+        p_form.add(username);
         //////
 
         //////
         JLabel batch = new JLabel("Password");
         batch.setBounds(300, 65 + m, txt_width, 25);
         p_form.add(batch);
-        JTextField batch_n = new JTextField(100);
-        batch_n.setBounds(300, 90 + m, txt_width, txt_height);
-        batch_n.setFont(font);
-        p_form.add(batch_n);
+        JTextField password = new JTextField(100);
+        password.setBounds(300, 90 + m, txt_width, txt_height);
+        password.setFont(font);
+        p_form.add(password);
         /////
 
         /////
@@ -98,10 +99,15 @@ public class Add_user {
         manu.setBounds(10, 120 + m, 200, 25);
         p_form.add(manu);
 
-        JTextField manifacturer = new JTextField(20);
-        manifacturer.setBounds(10, 145 + m, txt_width, txt_height);
-        manifacturer.setFont(font);
-        p_form.add(manifacturer);
+        JComboBox role = new JComboBox();
+        role.addItem("Store Keeper");
+        role.addItem("Pharmacist");
+        role.addItem("Cashier");
+        role.addItem("Manager");
+        role.addItem("Admin");
+        role.setBounds(10, 145 + m, txt_width, txt_height);
+        role.setFont(font);
+        p_form.add(role);
 
         /////
         JLabel emaill = new JLabel("Email");
@@ -113,16 +119,18 @@ public class Add_user {
         p_form.add(email);
 
         ///
-        JButton loginButton = new JButton("Register");
-        loginButton.setBounds(360, 200 + m, 100, 25);
-        loginButton.addActionListener(new ActionListener() {
+        JButton register = new JButton("Register");
+        register.setBounds(360, 200 + m, 100, 25);
+        register.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-               Query q=new Query();
-
-                int res= q.insert("INSERT INTO users (username,password,full_name,role,email,status)" +
-                        "VALUES('admin2','admin2','admin admin','admmin','zemm@',2)");
+                Query q = new Query();
+                Manage_user manage_user=new Manage_user();
+               byte[] hash = manage_user.encrypt(password.getText());
+                int res = q.insert("INSERT INTO users (username,password,full_name,role,email,status)" +
+                        "VALUES('" + username.getText() + "','" + hash.toString() + "','" + fname.getText() + "','" + role.getSelectedItem() + "'," +
+                        "'" + email.getText() + "',2)");
 
 
                 if (res == 1) {
@@ -136,7 +144,7 @@ public class Add_user {
 
             }
         });
-        panel.add(loginButton);
+        panel.add(register);
         /////////////// -----------/////////////
         JButton cancel = new JButton("Cancel");
         cancel.setBounds(470, 200 + m, 90, 25);
