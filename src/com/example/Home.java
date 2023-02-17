@@ -1,6 +1,8 @@
 package com.example;
 
 import com.example.Drug.Add_drug;
+import com.example.pharmacy.Request;
+import com.example.pharmacy.Sell;
 import com.example.users.Manage_user;
 
 import javax.swing.*;
@@ -109,10 +111,58 @@ public class Home {
         menuItem.setMnemonic(KeyEvent.VK_F);
         menu.add(menuItem);
 
+        ////
+        menuItem = new JMenuItem("Request Drug",
+                new ImageIcon("images/newfile.png"));
+        menuItem.setMnemonic(KeyEvent.VK_F);
+        menuItem.addActionListener(new ActionListener() {
+
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Request r = new Request();
+                try {
+                    if (r.request().getParent() == null) {
+                        r.request().setVisible(true);
+                        desktopPane.add(r.request());
+                    }
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+
+        });
+        menu.add(menuItem);
+        ///////
+        ////
+        menuItem = new JMenuItem("Sell",
+                new ImageIcon("images/newfile.png"));
+        menuItem.setMnemonic(KeyEvent.VK_F);
+        menuItem.addActionListener(new ActionListener() {
+
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Sell r = new Sell();
+                try {
+                    if (r.sell().getParent() == null) {
+                        r.sell().setVisible(true);
+                        desktopPane.add(r.sell());
+                    }
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+
+        });
+        menu.add(menuItem);
+        ///////
         // a group of radio button menu items
         menu.addSeparator();
         ButtonGroup group = new ButtonGroup();
-        JMenuItem  category = new JMenuItem("Classification", icon);
+        JMenuItem category = new JMenuItem("Classification", icon);
 
         category.setMnemonic(KeyEvent.VK_R);
         group.add(category);
@@ -189,8 +239,8 @@ public class Home {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Manage_user user=new Manage_user();
-                JInternalFrame internal=user.add_user();
+                Manage_user user = new Manage_user();
+                JInternalFrame internal = user.add_user();
                 if (internal.getParent() == null) {
                     internal.setVisible(true);
 

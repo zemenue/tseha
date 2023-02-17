@@ -4,8 +4,6 @@ import com.example.functions.Functions;
 
 import javax.swing.*;
 import java.sql.*;
-import java.util.List;
-import java.util.Map;
 
 public class Query {
     static Connection conn = null;

@@ -13,8 +13,8 @@ public final class App {
 
     public static void main(String[] args) {
         check_new_installation();
-         Login_ui l = new Login_ui();
-          l.login();
+        Login_ui l = new Login_ui();
+        l.login();
        /* Manage_user user=new Manage_user();
         user.add_user();*/
         // user.test();
@@ -32,7 +32,7 @@ public final class App {
                 count = count + 1;
             }
             if (count < 1) {
-                q.query_none("INSERT INTO users (username,password,full_name,email,role) VALUES('admin','admin','zemen endale','zem@gmail.com','admin')");
+                q.query_none("INSERT INTO users (username,password,full_name,email,role) VALUES('admin','admin','tsehay taddese','Tsehay@gmail.com','admin')");
 
                 System.out.println("Admin created.");
 
