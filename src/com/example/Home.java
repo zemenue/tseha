@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.Drug.Add_category;
+import com.example.Drug.Add_classification;
 import com.example.Drug.Add_drug;
 import com.example.pharmacy.Request;
 import com.example.pharmacy.Sell;
@@ -10,7 +12,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyVetoException;
 import java.sql.SQLException;
 
 public class Home {
@@ -44,19 +45,9 @@ public class Home {
         footer_text.setFont(font);
         footer.add(footer_text, BorderLayout.EAST);
 
-        register.setVisible(true);
-
-        desktopPane.add(register);
-
         frame.setJMenuBar(createMenuBar());
         frame.add(desktopPane, BorderLayout.CENTER);
         frame.add(footer, BorderLayout.PAGE_END);
-        try {
-            register.setMaximum(true);
-        } catch (PropertyVetoException e1) {
-
-            System.out.println(e1.getMessage());
-        }
         frame.setSize(1000, 800);
         frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         frame.setVisible(true);
@@ -89,17 +80,11 @@ public class Home {
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "New Drug");
-        menuItem.addActionListener(new ActionListener() {
-
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                if (register.getParent() == null) {
-                    register.setVisible(true);
-                    desktopPane.add(register);
-                }
-
+        menuItem.addActionListener(e -> {
+            //register.dispose();
+            if (register.getParent() == null) {
+                register.setVisible(true);
+                desktopPane.add(register);
             }
 
         });
@@ -115,21 +100,15 @@ public class Home {
         menuItem = new JMenuItem("Request Drug",
                 new ImageIcon("images/newfile.png"));
         menuItem.setMnemonic(KeyEvent.VK_F);
-        menuItem.addActionListener(new ActionListener() {
-
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Request r = new Request();
-                try {
-                    if (r.request().getParent() == null) {
-                        r.request().setVisible(true);
-                        desktopPane.add(r.request());
-                    }
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
+        menuItem.addActionListener(e -> {
+            Request r = new Request();
+            try {
+                if (r.request().getParent() == null) {
+                    r.request().setVisible(true);
+                    desktopPane.add(r.request());
                 }
-
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             }
 
         });
@@ -163,7 +142,20 @@ public class Home {
         menu.addSeparator();
         ButtonGroup group = new ButtonGroup();
         JMenuItem category = new JMenuItem("Classification", icon);
-
+        category.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Add_classification cls = new Add_classification();
+                try {
+                    if (cls.addclassification().getParent() == null) {
+                        cls.addclassification().setVisible(true);
+                        desktopPane.add(cls.addclassification());
+                    }
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
         category.setMnemonic(KeyEvent.VK_R);
         group.add(category);
         menu.add(category);
@@ -172,7 +164,20 @@ public class Home {
         rdmi.setMnemonic(KeyEvent.VK_O);
         group.add(rdmi);
         menu.add(rdmi);
-
+        rdmi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Add_category addCategory = new Add_category();
+                try {
+                    if (addCategory.add_cat().getParent() == null) {
+                        addCategory.add_cat().setVisible(true);
+                        desktopPane.add(addCategory.add_cat());
+                    }
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
         // a submenu
         menu.addSeparator();
         submenu = new JMenu("Null 0");

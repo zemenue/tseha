@@ -1,6 +1,7 @@
 package com.example.Drug;
 
 import com.example.Data.Query;
+import com.example.functions.Dialogs;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
@@ -17,8 +18,10 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Vector;
 
 public class Add_drug {
 
@@ -115,6 +118,7 @@ public class Add_drug {
         int txt_height = 27;
         Color background_color = new Color(199, 203, 199);
         Color panel_color = new Color(149, 150, 149);
+        Dialogs dialog = new Dialogs();
         p_container.setLayout(new BorderLayout());
         JPanel P_table = new JPanel();
         P_table.setLayout(new GridLayout());
@@ -133,7 +137,7 @@ public class Add_drug {
                     rs.getString("Drug_id"),
                     rs.getString("Drug_name"),
                     rs.getString("Drug_code"),
-                    rs.getString("batch_number") ,
+                    rs.getString("batch_number"),
                     rs.getString("manufacturer")
             });
 
@@ -142,10 +146,46 @@ public class Add_drug {
         JPopupMenu popupMenu = new JPopupMenu();
         popupMenu = new JPopupMenu();
         JMenuItem menuItemUpdate = new JMenuItem("Update");
+        menuItemUpdate.addActionListener(e -> {
+
+        });
         JMenuItem menuItemDelete = new JMenuItem("Delete");
+        menuItemDelete.addActionListener(e -> {
+            try {
+                int row = table.getSelectedRow();
+                int col = table.getSelectedColumn();
+                System.out.println();
+                query.Delete_update("DELETE  FROM Drug WHERE drug_id='" + table.getValueAt(row, 0) + "'", "Drug Deleted successfully.",
+                        "Message", "Drug Can not Delete.", "Error", "Are you sure to delete permanently?"
+                );
+                tableModel.getDataVector().removeAllElements();
+                tableModel.fireTableDataChanged();
+                ResultSet resultSet = query.retrieveData("SELECT * FROM Drug ORDER BY Drug_id desc");
+                while (resultSet.next()) {
+                    tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                            resultSet.getString("Drug_id"),
+                            resultSet.getString("Drug_name"),
+                            resultSet.getString("Drug_code"),
+                            resultSet.getString("batch_number")
+                    });
+
+                }
+            } catch (Exception ex) {
+                dialog.error("Error: " + ex.getMessage(), "Error");
+            }
+        });
         JMenuItem menuItemDispose = new JMenuItem("Dispose");
+        menuItemDispose.addActionListener(e -> {
+
+        });
         JMenuItem menuItemDetail = new JMenuItem("Detail");
+        menuItemDetail.addActionListener(e -> {
+
+        });
         JMenuItem menuItemPrint = new JMenuItem("Print");
+        menuItemPrint.addActionListener(e -> {
+
+        });
         popupMenu.add(menuItemUpdate);
         popupMenu.add(menuItemDelete);
         popupMenu.add(menuItemDispose);
@@ -324,9 +364,14 @@ public class Add_drug {
         JLabel category_JLabel = new JLabel("Category");
         category_JLabel.setBounds(10, 10 + m, 200, 25);
         p_form1.add(category_JLabel);
-        JComboBox catagory = new JComboBox();
-        catagory.addItem("ras mitat");
-        catagory.addItem("neger");
+        ArrayList<String> list = new ArrayList<>();
+
+        ResultSet resultSet = query.retrieveData("SELECT * FROM category");
+        while (resultSet.next()) {
+            list.add(resultSet.getString("catagory_name"));
+        }
+        JComboBox catagory = new JComboBox(new Vector<String>(list));
+
         catagory.setBounds(10, 35 + m, txt_width, txt_height);
         catagory.setFont(font);
         p_form1.add(catagory);
@@ -519,7 +564,6 @@ public class Add_drug {
                 }
 
 
-
             }
         });
         Save.setBounds(300, 315 + m, 120, txt_height);
@@ -546,6 +590,10 @@ public class Add_drug {
         TitledBorder border3 = new TitledBorder("Application");
         border3.setTitleJustification(TitledBorder.CENTER);
         border3.setTitlePosition(TitledBorder.TOP);
+
+        table.setColumnSelectionAllowed(false);
+        table.setRowSelectionAllowed(true);
+        table.setDefaultEditor(Object.class, null);
 
         JPanel form_container = new JPanel();
         p_form.setBorder(border);

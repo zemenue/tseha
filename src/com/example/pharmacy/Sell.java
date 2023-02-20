@@ -61,7 +61,7 @@ public class Sell {
                 "Inhalation",
                 "Lozenge",
         };
-        JInternalFrame sell = new JInternalFrame("Drug Sell Form", false, true, false, false);
+        JInternalFrame sell = new JInternalFrame("Drug Sell Form", true, true, true, true);
         sell.setLayout(new BorderLayout());
         JPanel p_table = new JPanel();
         p_table.setLayout(new GridLayout(1, 1));
@@ -231,14 +231,20 @@ public class Sell {
         /////
         /////
         JLabel sellJLabel = new JLabel("Description");
-        sellJLabel.setBounds(300, 290 + m, 200, 25);
+        sellJLabel.setBounds(10, 350 + m, 200, 25);
         p_form.add(sellJLabel);
 
         JTextArea Description = new JTextArea();
         Description.setAutoscrolls(true);
-        Description.setBounds(300, 315 + m, txt_width, 55);
+        Description.setBounds(10, 375 + m, 540, 100);
         Description.setFont(font);
         p_form.add(Description);
+        /////
+
+        JButton Save = new JButton("Save");
+        Save.setBounds(440, 480 + m, 100, 30);
+        Save.setFont(font);
+        p_form.add(Save);
         /////
         DefaultTableModel tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel);
@@ -259,15 +265,19 @@ public class Sell {
             });
 
         }
+        table.setColumnSelectionAllowed(false);
+        table.setRowSelectionAllowed(true);
+        table.setDefaultEditor(Object.class, null);
 
-        p_form.setPreferredSize(new Dimension(500, 600));
+        p_form.setPreferredSize(new Dimension(600, 530));
         p_table.setPreferredSize(new Dimension(600, 200));
-        p_table.add(table);
         p_table.setVisible(true);
         p_form.setVisible(true);
-        sell.add(p_form, BorderLayout.NORTH);
-        sell.add(p_table, BorderLayout.SOUTH);
-
+        p_table.add(new JScrollPane(table));
+        p_form.setLayout(null);
+        sell.setLayout(new FlowLayout());
+        sell.add(p_form);
+        sell.add(p_table);
         sell.pack();
         sell.setBounds(0, 0, 600, 800);
         sell.setVisible(true);
