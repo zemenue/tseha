@@ -2,6 +2,8 @@ package com.example.Drug;
 
 import com.example.Data.Query;
 import com.example.functions.Dialogs;
+import com.example.functions.Functions;
+import com.mysql.cj.util.StringUtils;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
@@ -9,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,11 +20,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Vector;
+import java.util.*;
 
 public class Add_drug {
 
@@ -111,11 +113,19 @@ public class Add_drug {
                 "Inhalation",
                 "Lozenge",
         };
-
+        JButton Save = new JButton("Save");
+        String selected_id;
+        Functions function = new Functions();
         Font font = new Font("SansSerif", Font.BOLD, 14);
         int m = 0;
         int txt_width = 260;
         int txt_height = 27;
+        NumberFormat format = NumberFormat.getInstance();
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(double.class);
+        formatter.setAllowsInvalid(false);
+        // If you want the value to be committed on each keystroke instead of focus lost
+        formatter.setCommitsOnValidEdit(true);
         Color background_color = new Color(199, 203, 199);
         Color panel_color = new Color(149, 150, 149);
         Dialogs dialog = new Dialogs();
@@ -143,56 +153,7 @@ public class Add_drug {
 
         }
 
-        JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu = new JPopupMenu();
-        JMenuItem menuItemUpdate = new JMenuItem("Update");
-        menuItemUpdate.addActionListener(e -> {
 
-        });
-        JMenuItem menuItemDelete = new JMenuItem("Delete");
-        menuItemDelete.addActionListener(e -> {
-            try {
-                int row = table.getSelectedRow();
-                int col = table.getSelectedColumn();
-                System.out.println();
-                query.Delete_update("DELETE  FROM Drug WHERE drug_id='" + table.getValueAt(row, 0) + "'", "Drug Deleted successfully.",
-                        "Message", "Drug Can not Delete.", "Error", "Are you sure to delete permanently?"
-                );
-                tableModel.getDataVector().removeAllElements();
-                tableModel.fireTableDataChanged();
-                ResultSet resultSet = query.retrieveData("SELECT * FROM Drug ORDER BY Drug_id desc");
-                while (resultSet.next()) {
-                    tableModel.insertRow(tableModel.getRowCount(), new Object[]{
-                            resultSet.getString("Drug_id"),
-                            resultSet.getString("Drug_name"),
-                            resultSet.getString("Drug_code"),
-                            resultSet.getString("batch_number")
-                    });
-
-                }
-            } catch (Exception ex) {
-                dialog.error("Error: " + ex.getMessage(), "Error");
-            }
-        });
-        JMenuItem menuItemDispose = new JMenuItem("Dispose");
-        menuItemDispose.addActionListener(e -> {
-
-        });
-        JMenuItem menuItemDetail = new JMenuItem("Detail");
-        menuItemDetail.addActionListener(e -> {
-
-        });
-        JMenuItem menuItemPrint = new JMenuItem("Print");
-        menuItemPrint.addActionListener(e -> {
-
-        });
-        popupMenu.add(menuItemUpdate);
-        popupMenu.add(menuItemDelete);
-        popupMenu.add(menuItemDispose);
-        popupMenu.add(menuItemDetail);
-        popupMenu.add(menuItemPrint);
-
-        table.setComponentPopupMenu(popupMenu);
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(true);
         table.setDefaultEditor(Object.class, null);
@@ -201,12 +162,11 @@ public class Add_drug {
                 // finalPopupMenu.setEnabled(true);
                 int row = table.getSelectedRow();
                 int col = table.getSelectedColumn();
-                System.out.println(table.getValueAt(row, 0));
+
             }
         });
 
 //
-
         JScrollPane sp = new JScrollPane(table);
         sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -241,7 +201,7 @@ public class Add_drug {
         JLabel batch = new JLabel("Batch Number");
         batch.setBounds(300, 65 + m, txt_width, 25);
         p_form.add(batch);
-        JTextField batch_n = new JTextField(100);
+        JTextField batch_n = new JTextField();
         batch_n.setBounds(300, 90 + m, txt_width, txt_height);
         batch_n.setFont(font);
         p_form.add(batch_n);
@@ -355,7 +315,7 @@ public class Add_drug {
         sellJLabel.setBounds(300, 290 + m, 200, 25);
         p_form.add(sellJLabel);
 
-        JTextField price = new JTextField(20);
+        JFormattedTextField price = new JFormattedTextField(formatter);
         price.setBounds(300, 315 + m, txt_width, txt_height);
         price.setFont(font);
         p_form.add(price);
@@ -400,7 +360,7 @@ public class Add_drug {
         JLabel shelfrJLabel = new JLabel("Shelf Row");
         shelfrJLabel.setBounds(300, 65 + m, 120, 25);
         p_form1.add(shelfrJLabel);
-        JTextField shelf_row = new JTextField(100);
+        JFormattedTextField shelf_row = new JFormattedTextField(formatter);
         shelf_row.setBounds(300, 90 + m, 120, txt_height);
         shelf_row.setFont(font);
         p_form1.add(shelf_row);
@@ -411,7 +371,7 @@ public class Add_drug {
         colmnJLabel.setBounds(440, 65 + m, 120, 25);
         p_form1.add(colmnJLabel);
 
-        JTextField shelf_col = new JTextField(20);
+        JFormattedTextField shelf_col = new JFormattedTextField(formatter);
         shelf_col.setBounds(440, 90 + m, 120, txt_height);
         shelf_col.setFont(font);
         p_form1.add(shelf_col);
@@ -428,14 +388,14 @@ public class Add_drug {
         JLabel numberpackJLabel = new JLabel("Number of Pack");
         numberpackJLabel.setBounds(300, 120 + m, 120, 25);
         p_form1.add(numberpackJLabel);
-        JTextField number_of_pack = new JTextField(20);
+        JFormattedTextField number_of_pack = new JFormattedTextField(formatter);
         number_of_pack.setBounds(300, 145 + m, 120, txt_height);
         number_of_pack.setFont(font);
         p_form1.add(number_of_pack);
         JLabel numberpackJLabelQ = new JLabel("qua. per pack");
         numberpackJLabelQ.setBounds(440, 120 + m, 120, 25);
         p_form1.add(numberpackJLabelQ);
-        JTextField quantity_per_pack = new JTextField(20);
+        JFormattedTextField quantity_per_pack = new JFormattedTextField(formatter);
         quantity_per_pack.setBounds(440, 145 + m, 120, txt_height);
         quantity_per_pack.setFont(font);
         p_form1.add(quantity_per_pack);
@@ -471,7 +431,7 @@ public class Add_drug {
         tempJLabel.setBounds(300, 175 + m, 120, 25);
         p_form1.add(tempJLabel);
 
-        JTextField temprature = new JTextField(20);
+        JFormattedTextField temprature = new JFormattedTextField(formatter);
         temprature.setBounds(300, 200 + m, 120, txt_height);
         temprature.setFont(font);
         p_form1.add(temprature);
@@ -480,7 +440,7 @@ public class Add_drug {
         humiditylJLabel.setBounds(440, 175 + m, 120, 25);
         p_form1.add(humiditylJLabel);
 
-        JTextField humidity = new JTextField(20);
+        JFormattedTextField humidity = new JFormattedTextField(formatter);
         humidity.setBounds(440, 200 + m, 120, txt_height);
         humidity.setFont(font);
         p_form1.add(humidity);
@@ -489,7 +449,7 @@ public class Add_drug {
         lightJLabel.setBounds(10, 230 + m, 200, 25);
         p_form1.add(lightJLabel);
 
-        JTextField light = new JTextField(20);
+        JFormattedTextField light = new JFormattedTextField(formatter);
         light.setBounds(10, 255 + m, txt_width, txt_height);
         light.setFont(font);
         p_form1.add(light);
@@ -519,32 +479,184 @@ public class Add_drug {
         strength.setFont(font);
         p_form1.add(strength);
         ///////
-
+        class inner {
+            void clr() {
+                drug_name.setText(null);
+                drug_code.setText(null);
+                batch_n.setText(null);
+                manifacturer.setText(null);
+                invoice_num.setText(null);
+                invoice_att.setText(null);
+                price.setText(null);
+                serial.setText(null);
+                shelf_number.setText(null);
+                shelf_row.setText(null);
+                shelf_col.setText(null);
+                tag_number.setText(null);
+                number_of_pack.setText(null);
+                quantity_per_pack.setText(null);
+                //primary_pack.setText(null);
+                // unit.setText(null);
+                temprature.setText(null);
+                humidity.setText(null);
+                light.setText("");
+                // Dossage.setText(null);
+            }
+        }
         // /////
 
-        JButton Save = new JButton("Save");
+
         Save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Date date = new Date();
+                date = manuf_date.getDate();
+                SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+                String today = DateFor.format(new Date());
+                int row = table.getSelectedRow();
+                int col = table.getSelectedColumn();
+
+                if (Objects.equals(drug_name.getText(), "")) {
+                    dialog.error("Please enter Drug Name", "Validation Error");
+                    return;
+                } else if (Objects.equals(drug_code.getText(), "")) {
+                    dialog.error("Please enter Drug Code", "Validation Error");
+                    return;
+                } else if (Objects.equals(batch_n.getText(), "")) {
+                    dialog.error("Please enter Batch number", "Validation Error");
+                    return;
+                } else if (Objects.equals(manifacturer.getText(), "")) {
+                    dialog.error("Please enter Drug Manufacturer", "Validation Error");
+                    return;
+                } else if (Objects.equals(manuf_date.getDate(), "")) {
+                    dialog.error("Please enter Manufactured Date", "Validation Error");
+                    return;
+                } else if (DateFor.format(manuf_date.getDate()).compareTo(today) > 0) {
+                    dialog.error("Please Enter Valid Manufacture date", "Validation Error");
+                    return;
+                } else if (Objects.equals(dateChooser_exp.getDate(), "")) {
+                    dialog.error("Please enter Expire Date", "Validation Error");
+                    return;
+                } else if (DateFor.format(dateChooser_exp.getDate()).compareTo(DateFor.format(manuf_date.getDate())) <= 0) {
+                    dialog.error("Please Enter Valid Expire date", "Validation Error");
+                    return;
+                } else if (Objects.equals(D_origin.getSelectedItem(), "")) {
+                    dialog.error("Please enter Drug Name", "Validation Error");
+                    return;
+                } else if (Objects.equals(invoice_num.getText(), "")) {
+                    dialog.error("Please enter Invoice Number", "Validation Error");
+                    return;
+                } else if (Objects.equals(invoice_date.getDate(), "")) {
+                    dialog.error("Please enter Invoice Date", "Validation Error");
+                    return;
+                } else if (DateFor.format(invoice_date.getDate()).compareTo(DateFor.format(manuf_date.getDate())) < 0) {
+                    dialog.error("Please Enter Valid Invoice date", "Validation Error");
+                    return;
+                } else if (Objects.equals(invoice_att.getText(), "")) {
+                    dialog.error("Please Attach invoice", "Validation Error");
+                    return;
+                } else if (Objects.equals(price.getText(), "")) {
+                    dialog.error("Please enter Drug Name", "Validation Error");
+                    return;
+                } else if (Objects.equals(catagory.getSelectedItem(), "")) {
+                    dialog.error("Please enter Category", "Validation Error");
+                    return;
+                } else if (Objects.equals(serial.getText(), "")) {
+                    dialog.error("Please enter Serial Number", "Validation Error");
+                    return;
+                } else if (Objects.equals(shelf_number.getText(), "")) {
+                    dialog.error("Please enter Shelf Number", "Validation Error");
+                    return;
+                } else if (Objects.equals(shelf_row.getText(), "")) {
+                    dialog.error("Please enter Shelf Row", "Validation Error");
+                    return;
+                } else if (Objects.equals(shelf_col.getText(), "")) {
+                    dialog.error("Please enter Shelf Column", "Validation Error");
+                    return;
+                } else if (Objects.equals(tag_number.getText(), "")) {
+                    dialog.error("Please enter Tag Number", "Validation Error");
+                    return;
+                } else if (Objects.equals(number_of_pack.getText(), "")) {
+                    dialog.error("Please enter Number of Pack", "Validation Error");
+                    return;
+                } else if (Objects.equals(quantity_per_pack.getText(), "")) {
+                    dialog.error("Please enter Quantity Per Pack", "Validation Error");
+                    return;
+                } else if (Objects.equals(primary_pack.getSelectedItem(), "")) {
+                    dialog.error("Please enter Primary Pack ", "Validation Error");
+                    return;
+                } else if (Objects.equals(unit.getSelectedItem(), "")) {
+                    dialog.error("Please enter Unit", "Validation Error");
+                    return;
+                } else if (Objects.equals(temprature.getText(), "")) {
+                    dialog.error("Please enter Temperature", "Validation Error");
+                    return;
+                } else if (Objects.equals(humidity.getText(), "")) {
+                    dialog.error("Please enter Humidity", "Validation Error");
+                    return;
+                } else if (Objects.equals(light.getText(), "")) {
+                    dialog.error("Please enter Light/Illumination", "Validation Error");
+                    return;
+                } else if (Objects.equals(Dossage.getSelectedItem(), "")) {
+                    dialog.error("Please enter Dosage Form", "Validation Error");
+                    return;
+                } else if (Objects.equals(drug_name.getText(), "")) {
+                    dialog.error("Please enter Drug Name", "Validation Error");
+                    return;
+                }
+
+
                 try {
-                    Date date = new Date();
-                    date = manuf_date.getDate();
-                    SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
-                    String stringDate = DateFor.format(date);
-                    System.out.println(stringDate);
-                    // System.out.println(Date.format);
+
+
                     Query query = new Query();
-                    query.insert("INSERT INTO inventory.Drug\n" +
-                            "(Drug_name, Drug_code, batch_number, manufacturer, manufacture_date, expire_date, origin, invoice_number," +
-                            " invoice_date, invoice_attachment, single_price, catagory_id, serial_number, shelf, shelf_row, shelf_colmn, " +
-                            "tag, num_pack, qua_per_pack, primary_pack, unit, temp, humudity, light, Dossage_form)\n" +
-                            "VALUES('" + drug_name.getText() + "', '" + drug_code.getText() + "', '" + batch_n.getText() + "', '" + manifacturer.getText() + "'," +
-                            " '" + DateFor.format(manuf_date.getDate()) + "', '" + DateFor.format(dateChooser_exp.getDate()) + "', '" + D_origin.getSelectedItem() + "', " +
-                            "'" + invoice_num.getText() + "', '" + DateFor.format(invoice_date.getDate()) + "', '" + invoice_att.getText() + "', " + price.getText() + ", " +
-                            "'" + catagory.getSelectedItem() + "', '" + serial.getText() + "', '" + shelf_number.getText() + "', " + shelf_row.getText() + "," +
-                            " " + shelf_col.getText() + ", '" + tag_number.getText() + "', " + number_of_pack.getText() + ", " + quantity_per_pack.getText() + "," +
-                            " '" + primary_pack.getSelectedItem() + "', '" + unit.getSelectedItem() + "', " + temprature.getText() + ", " + humidity.getText() + "," +
-                            " " + light.getText() + ", '" + Dossage.getSelectedItem() + "');\n");
+                    if (Save.getText().equals("Save")) {
+                        function.copyFile(new File(invoice_att.getText()),
+                            new File(function.random_string() + "." + function.getExtension(invoice_att.getText())));
+
+                        query.insert("INSERT INTO inventory.Drug\n" +
+                                "(Drug_name, Drug_code, batch_number, manufacturer, manufacture_date, expire_date, origin, invoice_number," +
+                                " invoice_date, invoice_attachment, single_price, catagory_id, serial_number, shelf, shelf_row, shelf_colmn, " +
+                                "tag, num_pack, qua_per_pack, primary_pack, unit, temp, humudity, light, Dossage_form)\n" +
+                                "VALUES('" + drug_name.getText() + "', '" + drug_code.getText() + "', '" + batch_n.getText() + "', '" + manifacturer.getText() + "'," +
+                                " '" + DateFor.format(manuf_date.getDate()) + "', '" + DateFor.format(dateChooser_exp.getDate()) + "', '" + D_origin.getSelectedItem() + "', " +
+                                "'" + invoice_num.getText() + "', '" + DateFor.format(invoice_date.getDate()) + "', '" +"files/"+ function.random_string() + "." + function.getExtension(invoice_att.getText()) + "', " + price.getText() + ", " +
+                                "'" + catagory.getSelectedItem() + "', '" + serial.getText() + "', '" + shelf_number.getText() + "', " + shelf_row.getText() + "," +
+                                " " + shelf_col.getText() + ", '" + tag_number.getText() + "', " + number_of_pack.getText() + ", " + quantity_per_pack.getText() + "," +
+                                " '" + primary_pack.getSelectedItem() + "', '" + unit.getSelectedItem() + "', " + temprature.getText() + ", " + humidity.getText() + "," +
+                                " " + light.getText() + ", '" + Dossage.getSelectedItem() + "');\n");
+
+                        dialog.info("Drug Successfully Saved.", "Add drug");
+                        inner in = new inner();
+                        in.clr();
+                    } else {
+                        String path="";
+                        String s=invoice_att.getText();
+                        String upToNCharacters = s.substring(0, Math.min(s.length(), 5));
+                        if(upToNCharacters.equals("files")){
+                            path="";
+                        }
+                        else {
+                            function.copyFile(new File(invoice_att.getText()),
+                                    new File(function.random_string() + "." + function.getExtension(invoice_att.getText())));
+                            path="files/";
+                        }
+                        String sql = "UPDATE inventory.Drug\n" +
+                                "SET Drug_name='" + drug_name.getText() + "', Drug_code='" + drug_code.getText() + "', batch_number='" + batch_n.getText() + "'," +
+                                " manufacturer='" + manifacturer.getText() + "', manufacture_date='" + DateFor.format(manuf_date.getDate()) + "', expire_date='" + DateFor.format(dateChooser_exp.getDate()) + "', " +
+                                "origin='" + D_origin.getSelectedItem() + "', invoice_number='" + invoice_num.getText() + "', invoice_date='" + DateFor.format(invoice_date.getDate()) + "', " +
+                                "invoice_attachment='" + function.random_string() + "." +path+ function.getExtension(invoice_att.getText()) + "', single_price=" + price.getText() + ", catagory_id='" + catagory.getSelectedItem() + "', " +
+                                "serial_number='" + serial.getText() + "', shelf='" + shelf_number.getText() + "', shelf_row=" + shelf_row.getText() + "," +
+                                " shelf_colmn=" + shelf_col.getText() + ", tag='" + tag_number.getText() + "', num_pack=" + number_of_pack.getText() + ", qua_per_pack=" + quantity_per_pack.getText() + "," +
+                                " primary_pack='" + primary_pack.getSelectedItem() + "', unit='" + unit.getSelectedItem() + "', temp=" + temprature.getText() + ", humudity=" + humidity.getText() + ", " +
+                                "light=" + light.getText() + ", Dossage_form='" + Dossage.getSelectedItem() + "', status='active'" +
+                                "WHERE drug_id=" + table.getValueAt(row, 0) + ";";
+                        query.Delete_update(sql, "Data updated successfully.", "update", "can't update", "Error", "Do you want to update?");
+
+                        dialog.info("Drug Successfully Updated.", "Update  drug");
+                        inner in = new inner();
+                        in.clr();
+                    }
 
 
                     tableModel.getDataVector().removeAllElements();
@@ -560,9 +672,8 @@ public class Add_drug {
 
                     }
                 } catch (Exception err) {
-                    System.out.println("error:" + err.getMessage());
+                    dialog.error("error:" + err.getMessage(), "Error");
                 }
-
 
             }
         });
@@ -573,8 +684,135 @@ public class Add_drug {
         JButton Clear = new JButton("Clear");
         Clear.setBounds(440, 315 + m, 120, txt_height);
         Clear.setFont(font);
+        Clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inner in = new inner();
+                in.clr();
+                Save.setText("Save");
+
+
+            }
+        });
+
         p_form1.add(Clear);
 
+///////////////////////////////////
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu = new JPopupMenu();
+        JMenuItem menuItemUpdate = new JMenuItem("Update");
+        menuItemUpdate.addActionListener(e -> {
+            Save.setText("Update");
+            try {
+                Date date = new Date();
+                SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
+
+                int row = table.getSelectedRow();
+                int col = table.getSelectedColumn();
+                ResultSet result = query.retrieveData("SELECT * FROM Drug WHERE drug_id='" + table.getValueAt(row, 0) + "' ");
+                while (result.next()) {
+                    drug_name.setText(result.getString("Drug_name"));
+                    drug_code.setText(result.getString("Drug_code"));
+                    batch_n.setText(result.getString("batch_number"));
+                    manifacturer.setText(result.getString("manufacturer"));
+
+                   // Date manu_date = new SimpleDateFormat("dd/MM/yyyy").parse(DateFor.format(result.getString("manufacture_date")));
+
+                   // manuf_date.setDate(manu_date);
+                   // Date manu_date_exp = new SimpleDateFormat("dd/MM/yyyy").parse(DateFor.format(result.getString("expire_date")));
+                  //  dateChooser_exp.setDate(manu_date_exp);
+                    D_origin.setSelectedItem(result.getString("origin"));
+                    invoice_num.setText(result.getString("invoice_number"));
+                    //Date invdatee = new SimpleDateFormat("dd/MM/yyyy").parse(DateFor.format(result.getString("invoice_date")));
+                   // invoice_date.setDate(invdatee);
+                    invoice_att.setText("files/"+result.getString("invoice_attachment"));
+                    price.setText(result.getString("single_price"));
+                   catagory.setSelectedItem(result.getString("catagory_id"));
+                    //dialog.info(result.getString("catagory_id"),"");
+
+                    serial.setText(result.getString("serial_number"));
+                    shelf_number.setText(result.getString("shelf"));
+                    shelf_row.setValue(Integer.parseInt(result.getString("shelf_row")));
+                    shelf_col.setValue(Integer.parseInt(result.getString("shelf_colmn")));
+                    tag_number.setText(result.getString("tag"));
+                    number_of_pack.setValue(Double.valueOf(result.getString("num_pack")));
+                    quantity_per_pack.setValue(Double.valueOf(result.getString("qua_per_pack")));
+                   primary_pack.setSelectedItem(result.getString("primary_pack"));
+                    unit.setSelectedItem(result.getString("unit"));
+                    temprature.setValue(Double.valueOf(result.getString("temp")));
+                    humidity.setValue(Double.valueOf(result.getString("humudity")));
+                    light.setValue(Double.valueOf(result.getString("light")));//
+                   Dossage.setSelectedItem(result.getString("Dossage_form"));
+                }
+
+            } catch (SQLException ex) {
+                dialog.error("Error:" + ex.getMessage(), "Error");
+            }
+
+        });
+        JMenuItem menuItemDelete = new JMenuItem("Delete");
+        menuItemDelete.addActionListener(e -> {
+            try {
+                int row = table.getSelectedRow();
+                int col = table.getSelectedColumn();
+                System.out.println();
+                query.Delete_update("DELETE  FROM Drug WHERE drug_id='" + table.getValueAt(row, 0) + "'", "Drug Deleted successfully.",
+                        "Message", "Drug Can not Delete.", "Error", "Are you sure to delete permanently?"
+                );
+                tableModel.getDataVector().removeAllElements();
+                tableModel.fireTableDataChanged();
+                ResultSet resultS = query.retrieveData("SELECT * FROM Drug ORDER BY Drug_id desc");
+                while (resultS.next()) {
+                    tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                            resultS.getString("Drug_id"),
+                            resultS.getString("Drug_name"),
+                            resultS.getString("Drug_code"),
+                            resultS.getString("batch_number")
+                    });
+
+                }
+            } catch (Exception ex) {
+                dialog.error("Error: " + ex.getMessage(), "Error");
+            }
+        });
+        JMenuItem menuItemDispose = new JMenuItem("Dispose");
+        menuItemDispose.addActionListener(e -> {
+            try {
+                int row = table.getSelectedRow();
+                int col = table.getSelectedColumn();
+                String q = "UPDATE inventory.Drug  SET status='disposed' WHERE drug_id='" + table.getValueAt(row, 0) + "';";
+                query.Delete_update(q, "Drug Disposed successfully.",
+                        "Message", "Drug Can not Dispose.", "Error", "Are you sure to Dispose?"
+                );
+                tableModel.getDataVector().removeAllElements();
+                tableModel.fireTableDataChanged();
+                ResultSet resultSe = query.retrieveData("SELECT * FROM Drug ORDER BY Drug_id desc");
+                while (resultSe.next()) {
+                    tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                            resultSe.getString("Drug_id"),
+                            resultSe.getString("Drug_name"),
+                            resultSe.getString("Drug_code"),
+                            resultSe.getString("batch_number")
+                    });
+
+                }
+            } catch (Exception ex) {
+                dialog.error("Error: " + ex.getMessage(), "Error");
+            }
+        });
+        JMenuItem menuItemDetail = new JMenuItem("Detail");
+        menuItemDetail.addActionListener(e -> {
+
+        });
+
+        popupMenu.add(menuItemUpdate);
+        popupMenu.add(menuItemDelete);
+        popupMenu.add(menuItemDispose);
+        popupMenu.add(menuItemDetail);
+
+
+        table.setComponentPopupMenu(popupMenu);
+        /////////////////////////////////////////
         //// -----------------------------------------------------------------///////////////////////////
         JPanel p_form3 = new JPanel();
         //// -----------------------------------------------------------------///////////////////////////
@@ -628,5 +866,7 @@ public class Add_drug {
         p_container.add(scroll, BorderLayout.CENTER);
         p_container.add(P_table, BorderLayout.SOUTH);
         p_container.setBackground(background_color);
+
+
     }
 }
