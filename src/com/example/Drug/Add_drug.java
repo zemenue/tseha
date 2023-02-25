@@ -653,7 +653,7 @@ public class Add_drug {
                                 "WHERE drug_id=" + table.getValueAt(row, 0) + ";";
                         query.Delete_update(sql, "Data updated successfully.", "update", "can't update", "Error", "Do you want to update?");
 
-                        dialog.info("Drug Successfully Updated.", "Update  drug");
+
                         inner in = new inner();
                         in.clr();
                     }
