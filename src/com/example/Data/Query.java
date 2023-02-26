@@ -10,7 +10,7 @@ public class Query {
     static Connection conn = null;
     ResultSet resultSet;
     Statement statement;
-    Functions fn = new Functions();
+   // Functions fn = new Functions();
     Dialogs dialog = new Dialogs();
 
     public int insert(String query_string) {
@@ -25,8 +25,6 @@ public class Query {
             }
         } catch (SQLException ex) {
             dialog.error("Error: " + ex.getMessage(), "Error");
-        } finally {
-
         }
         return 2;
     }

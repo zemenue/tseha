@@ -3,6 +3,8 @@ package com.example;
 import com.example.Drug.Add_category;
 import com.example.Drug.Add_classification;
 import com.example.Drug.Add_drug;
+import com.example.Drug.Detail;
+import com.example.functions.Functions;
 import com.example.pharmacy.Request;
 import com.example.pharmacy.Sell;
 import com.example.users.Manage_user;
@@ -15,6 +17,8 @@ import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 
 public class Home {
+   Functions function=new Functions();
+
     public int id;
     public String Username;
     Font font = new Font("SansSerif", Font.BOLD, 14);
@@ -39,18 +43,20 @@ public class Home {
         // register.add(panel, BorderLayout.WEST);
 
 
+
         JPanel footer = new JPanel();
         footer.setLayout(new BorderLayout());
         JLabel footer_text = new JLabel("Server: Connected");
         footer_text.setFont(font);
         footer.add(footer_text, BorderLayout.EAST);
-
+       // function.check_expired_drugs();
         frame.setJMenuBar(createMenuBar());
         frame.add(desktopPane, BorderLayout.CENTER);
         frame.add(footer, BorderLayout.PAGE_END);
         frame.setSize(1000, 800);
         frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         frame.setVisible(true);
+        function.check_expired_drugs();
     }
 
     public JMenuBar createMenuBar() {
@@ -74,7 +80,7 @@ public class Home {
         Image image = icon.getImage(); // transform it
         Image newimg = image.getScaledInstance(10, 10, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         icon = new ImageIcon(newimg); // transform it back
-        menuItem = new JMenuItem("New Drug.", icon);
+        menuItem = new JMenuItem("Manage Drug.", icon);
         menuItem.setMnemonic(KeyEvent.VK_P);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
@@ -91,10 +97,7 @@ public class Home {
 
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Add Drug",
-                new ImageIcon("images/newfile.png"));
-        menuItem.setMnemonic(KeyEvent.VK_F);
-        menu.add(menuItem);
+
 
         ////
         menuItem = new JMenuItem("Request Drug",
@@ -178,19 +181,7 @@ public class Home {
                 }
             }
         });
-        // a submenu
-        menu.addSeparator();
-        submenu = new JMenu("Null 0");
-        submenu.setMnemonic(KeyEvent.VK_S);
 
-        menuItem = new JMenuItem("Null 1");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_2, ActionEvent.ALT_MASK));
-        submenu.add(menuItem);
-
-        menuItem = new JMenuItem("Null 2");
-        submenu.add(menuItem);
-        menu.add(submenu);
 
         ////////////////////////////////////////////////////////
         menu = new JMenu("Store");
@@ -297,4 +288,5 @@ public class Home {
         return menuBar;
 
     }
+
 }
