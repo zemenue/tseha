@@ -70,16 +70,18 @@ public class Login_ui {
 
           int uid = 0;
           String username = null;
+          String role=null;
           int count=0;
           while (res.next()) {
             count=count+1;
             uid = res.getInt("uid");
+            role= res.getString("role");
             username = res.getString("username").trim();
 
           }
 
           if (count >= 1) {
-            Home m = new Home(uid, username);
+            Home m = new Home(uid, username,role);
 
             login_JFrame.dispose();
           } else if (count <= 0) {

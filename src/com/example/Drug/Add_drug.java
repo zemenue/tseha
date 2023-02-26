@@ -121,12 +121,12 @@ public class Add_drug {
         int m = 0;
         int txt_width = 260;
         int txt_height = 27;
-        NumberFormat format = NumberFormat.getInstance();
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setValueClass(double.class);
-        formatter.setAllowsInvalid(false);
-        // If you want the value to be committed on each keystroke instead of focus lost
-        formatter.setCommitsOnValidEdit(true);
+        NumberFormat longFormat = NumberFormat.getIntegerInstance();
+
+        NumberFormatter numberFormatter = new NumberFormatter(longFormat);
+        numberFormatter.setValueClass(Long.class); //optional, ensures you will always get a long value
+        numberFormatter.setAllowsInvalid(false); //this is the key!!
+        numberFormatter.setMinimum(0l); //Optional
         Color background_color = new Color(199, 203, 199);
         Color panel_color = new Color(149, 150, 149);
         Dialogs dialog = new Dialogs();
@@ -326,7 +326,7 @@ public class Add_drug {
         sellJLabel.setBounds(300, 290 + m, 200, 25);
         p_form.add(sellJLabel);
 
-        JFormattedTextField price = new JFormattedTextField(formatter);
+        JFormattedTextField price = new JFormattedTextField(numberFormatter);
         price.setBounds(300, 315 + m, txt_width, txt_height);
         price.setFont(font);
         p_form.add(price);
@@ -371,7 +371,7 @@ public class Add_drug {
         JLabel shelfrJLabel = new JLabel("Shelf Row");
         shelfrJLabel.setBounds(300, 65 + m, 120, 25);
         p_form1.add(shelfrJLabel);
-        JFormattedTextField shelf_row = new JFormattedTextField(formatter);
+        JFormattedTextField shelf_row = new JFormattedTextField(numberFormatter);
         shelf_row.setBounds(300, 90 + m, 120, txt_height);
         shelf_row.setFont(font);
         p_form1.add(shelf_row);
@@ -382,7 +382,7 @@ public class Add_drug {
         colmnJLabel.setBounds(440, 65 + m, 120, 25);
         p_form1.add(colmnJLabel);
 
-        JFormattedTextField shelf_col = new JFormattedTextField(formatter);
+        JFormattedTextField shelf_col = new JFormattedTextField(numberFormatter);
         shelf_col.setBounds(440, 90 + m, 120, txt_height);
         shelf_col.setFont(font);
         p_form1.add(shelf_col);
@@ -399,14 +399,14 @@ public class Add_drug {
         JLabel numberpackJLabel = new JLabel("Number of Pack");
         numberpackJLabel.setBounds(300, 120 + m, 120, 25);
         p_form1.add(numberpackJLabel);
-        JFormattedTextField number_of_pack = new JFormattedTextField(formatter);
+        JFormattedTextField number_of_pack = new JFormattedTextField(numberFormatter);
         number_of_pack.setBounds(300, 145 + m, 120, txt_height);
         number_of_pack.setFont(font);
         p_form1.add(number_of_pack);
         JLabel numberpackJLabelQ = new JLabel("qua. per pack");
         numberpackJLabelQ.setBounds(440, 120 + m, 120, 25);
         p_form1.add(numberpackJLabelQ);
-        JFormattedTextField quantity_per_pack = new JFormattedTextField(formatter);
+        JFormattedTextField quantity_per_pack = new JFormattedTextField(numberFormatter);
         quantity_per_pack.setBounds(440, 145 + m, 120, txt_height);
         quantity_per_pack.setFont(font);
         p_form1.add(quantity_per_pack);
@@ -442,7 +442,7 @@ public class Add_drug {
         tempJLabel.setBounds(300, 175 + m, 120, 25);
         p_form1.add(tempJLabel);
 
-        JFormattedTextField temprature = new JFormattedTextField(formatter);
+        JFormattedTextField temprature = new JFormattedTextField(numberFormatter);
         temprature.setBounds(300, 200 + m, 120, txt_height);
         temprature.setFont(font);
         p_form1.add(temprature);
@@ -451,7 +451,7 @@ public class Add_drug {
         humiditylJLabel.setBounds(440, 175 + m, 120, 25);
         p_form1.add(humiditylJLabel);
 
-        JFormattedTextField humidity = new JFormattedTextField(formatter);
+        JFormattedTextField humidity = new JFormattedTextField(numberFormatter);
         humidity.setBounds(440, 200 + m, 120, txt_height);
         humidity.setFont(font);
         p_form1.add(humidity);
@@ -460,7 +460,7 @@ public class Add_drug {
         lightJLabel.setBounds(10, 230 + m, 200, 25);
         p_form1.add(lightJLabel);
 
-        JFormattedTextField light = new JFormattedTextField(formatter);
+        JFormattedTextField light = new JFormattedTextField(numberFormatter);
         light.setBounds(10, 255 + m, txt_width, txt_height);
         light.setFont(font);
         p_form1.add(light);

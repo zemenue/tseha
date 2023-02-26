@@ -113,7 +113,7 @@ public class Add_classification {
                         query.insert("INSERT INTO inventory.classification (class_name,class_code)\n" +
                                 "VALUES('" + class_name.getText() + "', '" + class_code.getText() + "')");
 
-                        System.out.println("Data inserted.");
+                      dialog.info("Classification inserted","Classification");
                         tableModel.getDataVector().removeAllElements();
                         tableModel.fireTableDataChanged();
                         ResultSet rs = query.retrieveData("SELECT * FROM classification ORDER BY class_id desc");
