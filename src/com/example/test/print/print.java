@@ -24,7 +24,7 @@ public class print {
         return Printable.PAGE_EXISTS;
       }
     });
-    if (pj.printDialog() == false)
+    if (!pj.printDialog())
       return;
     try {
       pj.print();

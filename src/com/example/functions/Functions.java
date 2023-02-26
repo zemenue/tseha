@@ -3,22 +3,22 @@ package com.example.functions;
 import com.example.Data.Query;
 import org.apache.commons.io.FilenameUtils;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 
 public class Functions {
   Dialogs dialog=new Dialogs();
+  Query query=new Query();
   public  List<Map<String, ?>> resultSetToList(ResultSet rs)
       throws SQLException {
     ResultSetMetaData md = rs.getMetaData();
@@ -58,13 +58,40 @@ public class Functions {
   }
   ///////////////////////////////drugs///////////////////////
 
-  public void check_expired_drugs() {
 
+  public void check_expired_drugs(){
+    try{
+
+     ResultSet resultset = query.retrieveData("SELECT * FROM Drug WHERE expire_date <= CURRENT_DATE()");
+      int i = 0;
+      while (resultset.next()) {
+        i++;
+      }
+      if(i>0){
+        dialog.error("There are "+i+" Expired Drugs ","Expired Drugs");
+      }
+    } catch (Exception e){
+      dialog.error(e.getMessage(),"Error");
+
+    }
   }
-  public void get_expired_drugs( String from,String to) {
 
+  public ResultSet get_expired_drugs( ) {
+    try {
+      return query.retrieveData("SELECT * FROM Drug WHERE expire_date <= CURRENT_DATE()");
+    } catch (SQLException e) {
+      dialog.error(e.getMessage(),"Error m");
+    }
+    return null;
   }
-
+  public void frame_dialog( JFrame frame,int width,int height) {
+    JDialog dialog = new JDialog(frame);
+    dialog.setTitle("Dialog created without extending JDialog class.");
+    dialog.setSize(new Dimension(width, height));
+    dialog.setLocationRelativeTo(frame);
+    dialog.setModal(true);
+    dialog.setVisible(true);
+  }
 
   //////////////////////////////end drugs//////////////////////////////
 }

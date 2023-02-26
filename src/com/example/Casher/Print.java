@@ -2,16 +2,14 @@ package com.example.Casher;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDateTime;
 
 public class Print {
   StringBuilder txt;
 
-  public void print() {
+  public JInternalFrame print() {
 
     String HTMLTEXT = "";
-    ;
-    JTextPane textPane1 = new JTextPane();
+      JTextPane textPane1 = new JTextPane();
 
     textPane1.setContentType("text/html");
 
@@ -96,12 +94,13 @@ public class Print {
     textPane1.setBackground(null); // this is the same as a JLabel
     textPane1.setBorder(null); // remove the border
     textPane1.setFont(new Font("Times New Roman", Font.PLAIN, 30));
-    JFrame f = new JFrame();
+    JInternalFrame f = new JInternalFrame();
     f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     f.getContentPane().add(new JScrollPane(textPane1));
     f.setSize(600, 700);
-    f.setLocationRelativeTo(null);
+
     f.setVisible(true);
+    return f;
   }
 
 }
