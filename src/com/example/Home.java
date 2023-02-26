@@ -3,7 +3,6 @@ package com.example;
 import com.example.Drug.Add_category;
 import com.example.Drug.Add_classification;
 import com.example.Drug.Add_drug;
-import com.example.Drug.Detail;
 import com.example.functions.Functions;
 import com.example.pharmacy.Request;
 import com.example.pharmacy.Sell;
@@ -26,7 +25,7 @@ public class Home {
     JFrame frame = new JFrame();
     JInternalFrame register = new JInternalFrame("Register Drug", true, true, true, true);
 
-    public Home(int id, String username) throws SQLException {
+    public Home(int id, String username, String role) throws SQLException {
         this.id = id;
         this.Username = username;
         Add_drug drug = new Add_drug();

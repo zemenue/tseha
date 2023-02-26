@@ -1,15 +1,17 @@
 package com.example.pharmacy;
 
 import com.example.Data.Query;
+import com.example.functions.Dialogs;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Vector;
-
 public class Request {
     public JInternalFrame request() throws SQLException {
         Font font = new Font("SansSerif", Font.BOLD, 14);
@@ -60,13 +62,28 @@ public class Request {
         p_table.setLayout(new GridLayout(1, 1));
         JPanel p_form = new JPanel();
         p_form.setLayout(null);
+        DefaultTableModel tableModel = new DefaultTableModel();
+        JTable table = new JTable(tableModel);
+        Query query = new Query();
+        Dialogs dialog = new Dialogs();
+        NumberFormat longFormat = NumberFormat.getIntegerInstance();
+
+        NumberFormatter numberFormatter = new NumberFormatter(longFormat);
+        numberFormatter.setValueClass(Long.class); //optional, ensures you will always get a long value
+        numberFormatter.setAllowsInvalid(false); //this is the key!!
+        numberFormatter.setMinimum(0l); //Optional
+        tableModel.addColumn("ID");
+        tableModel.addColumn("Drug Name");
+        tableModel.addColumn("Quantity");
+        tableModel.addColumn("Unit");
+        tableModel.addColumn("Dosage");
         ///////
         JLabel message = new JLabel("Drug Name");
         message.setBounds(10, 10 + m, 500, 30);
         p_form.add(message);
 
         ArrayList<String> list = new ArrayList<>();
-        Query query = new Query();
+
         ResultSet resultSet = query.retrieveData("SELECT * FROM Drug");
         while (resultSet.next()) {
             list.add(resultSet.getString("Drug_name"));
@@ -83,10 +100,10 @@ public class Request {
         passwordLabel.setBounds(10, 65 + m, 200, 25);
         p_form.add(passwordLabel);
 
-        JTextField drug_code = new JTextField(20);
-        drug_code.setBounds(10, 90 + m, txt_width, txt_height);
-        drug_code.setFont(font);
-        p_form.add(drug_code);
+        JFormattedTextField quantity = new JFormattedTextField(numberFormatter);
+        quantity.setBounds(10, 90 + m, txt_width, txt_height);
+        quantity.setFont(font);
+        p_form.add(quantity);
         //////
 
         //////
@@ -110,33 +127,93 @@ public class Request {
         p_form.add(unit);
 
         //////
-        JButton Save = new JButton("Request");
+        JButton Save = new JButton("Save");
         Save.setBounds(440, 140 + m, 120, txt_height);
         Save.setFont(font);
+        Save.addActionListener(e -> {
+            try {
+
+                query.insert("INSERT INTO inventory.request (Drug_id,quantity,unit,dosage)" +
+                        "VALUES(" +
+                        "'" + drug_name.getSelectedItem() + "'," +
+                        "'" + Double.valueOf(quantity.getText()) + "'," +
+                        "'" + unit.getSelectedItem() + "'," +
+                        "'" + dossage.getSelectedItem() + "'" +
+                        ")");
+
+                dialog.info("Request inserted","request");
+
+                tableModel.getDataVector().removeAllElements();
+                tableModel.fireTableDataChanged();
+                ResultSet rs = query.retrieveData("SELECT * FROM request ORDER BY request_id desc");
+                while (rs.next()) {
+                    tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                            rs.getString("request_id"),
+                            rs.getString("Drug_id"),
+                            rs.getString("quantity"),
+                            rs.getString("unit"),
+                            rs.getString("dosage")
+                    });
+
+                }
+            } catch (SQLException ex) {
+                dialog.error(ex.getMessage(), "Error");
+            }
+
+        });
         p_form.add(Save);
         ////////////////
 
-        DefaultTableModel tableModel = new DefaultTableModel();
-        JTable table = new JTable(tableModel);
-        tableModel.addColumn("ID");
-        tableModel.addColumn("Drug Name");
-        tableModel.addColumn("Drug Code");
-        tableModel.addColumn("Batch Number");
-        tableModel.addColumn("Manufacturer");
-        ResultSet rs = query.retrieveData("SELECT * FROM Drug ORDER BY Drug_id desc");
+
+        tableModel.getDataVector().removeAllElements();
+        tableModel.fireTableDataChanged();
+        ResultSet rs = query.retrieveData("SELECT * FROM request ORDER BY request_id desc");
         while (rs.next()) {
             tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                    rs.getString("request_id"),
                     rs.getString("Drug_id"),
-                    rs.getString("Drug_name"),
-                    rs.getString("Drug_code"),
-                    rs.getString("batch_number"),
-                    rs.getString("manufacturer")
+                    rs.getString("quantity"),
+                    rs.getString("unit"),
+                    rs.getString("dosage")
             });
 
         }
 
         /////
-        p_table.add(table);
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu = new JPopupMenu();
+        JMenuItem menuItemDelete = new JMenuItem("Cancel Request");
+        menuItemDelete.addActionListener(e -> {
+            int row = table.getSelectedRow();
+
+
+            try {
+                query.Delete_update("DELETE FROM request  WHERE request_id=" + table.getValueAt(row, 0) + "", "Request  Canceled."
+                        , "cancel", "Can't cancel request.", "Error", "Are you sure to cancel request?"
+                );
+
+                tableModel.getDataVector().removeAllElements();
+                tableModel.fireTableDataChanged();
+                ResultSet rs1 = query.retrieveData("SELECT * FROM request ORDER BY request_id desc");
+                while (rs1.next()) {
+                    tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                            rs1.getString("request_id"),
+                            rs1.getString("Drug_id"),
+                            rs1.getString("quantity"),
+                            rs1.getString("unit"),
+                            rs1.getString("dosage")
+                    });
+
+                }
+            } catch (SQLException ex) {
+                dialog.error(ex.getMessage(), "Error");
+            }
+
+        });
+        popupMenu.add(menuItemDelete);
+
+        table.setComponentPopupMenu(popupMenu);
+        p_table.add(new JScrollPane(table) );
         p_form.setPreferredSize(new Dimension(500, 200));
         p_table.setPreferredSize(new Dimension(600, 200));
 
