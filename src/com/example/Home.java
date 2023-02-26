@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.Casher.Collect;
 import com.example.Drug.Add_category;
 import com.example.Drug.Add_classification;
 import com.example.Drug.Add_drug;
@@ -183,17 +184,24 @@ public class Home {
 
 
         ////////////////////////////////////////////////////////
-        menu = new JMenu("Store");
-
+        menu = new JMenu("Payment");
         menuBar.add(menu);
 
-        icon = new ImageIcon(newimg); // transform it back
-        menuItem = new JMenuItem("Shelf", icon);
-        menuItem.setMnemonic(KeyEvent.VK_P);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_1, ActionEvent.ALT_MASK));
-        menuItem.getAccessibleContext().setAccessibleDescription(
-                "New Drug");
+        menuItem = new JMenuItem("Collect");
+       menuItem.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               Collect collect=new Collect();
+               try {
+                   if(collect.collect().getParent()==null){
+                       collect.collect().setVisible(true);
+                       desktopPane.add(collect.collect());
+                   }
+               } catch (SQLException ex) {
+                   throw new RuntimeException(ex);
+               }
+           }
+       });
         menu.add(menuItem);
         ////////////////////////////////////////////////////////
         menu = new JMenu("Report");

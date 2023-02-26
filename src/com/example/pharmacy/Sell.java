@@ -1,30 +1,58 @@
 package com.example.pharmacy;
 
 import com.example.Data.Query;
+import com.example.functions.Dialogs;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
+import java.text.SimpleDateFormat;
 
 public class Sell {
     public JInternalFrame sell() throws SQLException {
+        Dialogs dialogs = new Dialogs();
+        Query query = new Query();
         Font font = new Font("SansSerif", Font.BOLD, 14);
         int m = 0;
         int txt_width = 260;
         int txt_height = 27;
+        NumberFormat longFormat = NumberFormat.getIntegerInstance();
+
+        NumberFormatter numberFormatter = new NumberFormatter(longFormat);
+        numberFormatter.setValueClass(Long.class); //optional, ensures you will always get a long value
+        numberFormatter.setAllowsInvalid(false); //this is the key!!
+        numberFormatter.setMinimum(0l); //Optional
         Color background_color = new Color(199, 203, 199);
         Color panel_color = new Color(149, 150, 149);
+        DefaultTableModel tableModel = new DefaultTableModel();
+        JTable table = new JTable(tableModel);
+        tableModel.addColumn("ID");
+        tableModel.addColumn("Drug Name");
+        tableModel.addColumn("Quantity");
+        tableModel.addColumn("Dosage");
+        tableModel.addColumn("unit");
+        tableModel.addColumn("Patient Name");
+        tableModel.addColumn("Card NUmber");
+        tableModel.addColumn("Address");
+        tableModel.addColumn("Sex");
+        tableModel.addColumn("Age");
+        tableModel.addColumn("Status");
+
+
         String[] unitlist = new String[]{
                 "Kg",
                 "g",
@@ -74,7 +102,7 @@ public class Sell {
         p_form.add(message);
 
         ArrayList<String> list = new ArrayList<>();
-        Query query = new Query();
+
         ResultSet resultSet = query.retrieveData("SELECT * FROM Drug");
         while (resultSet.next()) {
             list.add(resultSet.getString("Drug_name"));
@@ -91,10 +119,10 @@ public class Sell {
         passwordLabel.setBounds(10, 65 + m, 200, 25);
         p_form.add(passwordLabel);
 
-        JTextField drug_code = new JTextField(20);
-        drug_code.setBounds(10, 90 + m, txt_width, txt_height);
-        drug_code.setFont(font);
-        p_form.add(drug_code);
+        JFormattedTextField quantity = new JFormattedTextField(numberFormatter);
+        quantity.setBounds(10, 90 + m, txt_width, txt_height);
+        quantity.setFont(font);
+        p_form.add(quantity);
         //////
 
         //////
@@ -131,10 +159,10 @@ public class Sell {
         Addressl.setBounds(300, 125 + m, 200, 25);
         p_form.add(Addressl);
 
-        JTextField Address = new JTextField();
-        Address.setBounds(300, 150 + m, txt_width, txt_height);
-        Address.setFont(font);
-        p_form.add(Address);
+        JTextField card = new JTextField();
+        card.setBounds(300, 150 + m, txt_width, txt_height);
+        card.setFont(font);
+        p_form.add(card);
         /////
         ///
         JLabel origin = new JLabel("Address ");
@@ -164,7 +192,7 @@ public class Sell {
         agl.setBounds(440, 175 + m, 120, 25);
         p_form.add(agl);
 
-        JTextField age = new JTextField();
+        JFormattedTextField age = new JFormattedTextField(numberFormatter);
         age.setBounds(440, 200 + m, 120, txt_height);
         age.setFont(font);
         p_form.add(age);
@@ -244,24 +272,113 @@ public class Sell {
         JButton Save = new JButton("Save");
         Save.setBounds(440, 480 + m, 100, 30);
         Save.setFont(font);
+
+        Date date = new Date();
+
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        String today = DateFor.format(new Date());
+        Save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                query.insert("INSERT INTO inventory.sell\n" +
+                        "( drug_id, quantity, dosage, unit, patient_name, card_number, address, sex, age, health_center, `date`, prescription_att, description)\n" +
+                        "VALUES( '" + drug_name.getSelectedItem() + "', " +Double.valueOf(quantity.getText())  + ", '" + dossage.getSelectedItem() + "', '" + unit.getSelectedItem() + "'," +
+                        " '" + patient.getText() + "', '" + card.getText() + "', '" + address.getText() + "', '" + sex.getSelectedItem() + "'," +
+                        " " + age.getText() + ", '" + health_center.getText() + "', '" + DateFor.format(Date_per.getDate()) + "', '" + _att.getText() + "', '" + Description.getText() + "');\n");
+
+                dialogs.info("Data inserted", "Message");
+
+                try {
+
+                    ResultSet rs = query.retrieveData("SELECT * FROM sell ORDER BY sell_id desc");
+                    while (rs.next()) {
+                        tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                                rs.getString("sell_id"),
+                                rs.getString("drug_id"),
+                                rs.getString("quantity"),
+                                rs.getString("dosage"),
+                                rs.getString("unit"),
+                                rs.getString("patient_name"),
+                                rs.getString("card_number"),
+                                rs.getString("address"),
+                                rs.getString("sex"),
+                                rs.getString("age"),
+                                rs.getString("status")
+                        });
+
+                    }
+                } catch (SQLException ex) {
+                    dialogs.error("Error:"+ex.getMessage(),"Error");
+                }
+
+
+
+
+
+            }
+        });
         p_form.add(Save);
         /////
-        DefaultTableModel tableModel = new DefaultTableModel();
-        JTable table = new JTable(tableModel);
-        tableModel.addColumn("ID");
-        tableModel.addColumn("Drug Name");
-        tableModel.addColumn("Drug Code");
-        tableModel.addColumn("Batch Number");
-        tableModel.addColumn("Manufacturer");
 
-        ResultSet rs = query.retrieveData("SELECT * FROM Drug ORDER BY Drug_id desc");
+        /////
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu = new JPopupMenu();
+        JMenuItem menuItemDelete = new JMenuItem("Cancel Request");
+        menuItemDelete.addActionListener(e -> {
+            int row = table.getSelectedRow();
+
+
+            try {
+                query.Delete_update("DELETE FROM sell  WHERE sell_id=" + table.getValueAt(row, 0) + " AND status='pending'",
+                        "Sell  Canceled."
+                        , "cancel", "Can't cancel Sell.",
+                        "Error", "Are you sure to cancel Sell?"
+                );
+
+                tableModel.getDataVector().removeAllElements();
+                tableModel.fireTableDataChanged();
+                ResultSet rs1 = query.retrieveData("SELECT * FROM sell ORDER BY sell_id desc");
+                while (rs1.next()) {
+                    tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                            rs1.getString("sell_id"),
+                            rs1.getString("drug_id"),
+                            rs1.getString("quantity"),
+                            rs1.getString("dosage"),
+                            rs1.getString("unit"),
+                            rs1.getString("patient_name"),
+                            rs1.getString("card_number"),
+                            rs1.getString("address"),
+                            rs1.getString("sex"),
+                            rs1.getString("age"),
+                            rs1.getString("status")
+
+                    });
+
+                }
+            } catch (SQLException ex) {
+                dialogs.error(ex.getMessage(), "Error");
+            }
+
+        });
+        popupMenu.add(menuItemDelete);
+
+        table.setComponentPopupMenu(popupMenu);
+
+        ResultSet rs = query.retrieveData("SELECT * FROM sell ORDER BY sell_id desc");
         while (rs.next()) {
             tableModel.insertRow(tableModel.getRowCount(), new Object[]{
-                    rs.getString("Drug_id"),
-                    rs.getString("Drug_name"),
-                    rs.getString("Drug_code"),
-                    rs.getString("batch_number"),
-                    rs.getString("manufacturer")
+                    rs.getString("sell_id"),
+                    rs.getString("drug_id"),
+                    rs.getString("quantity"),
+                    rs.getString("dosage"),
+                    rs.getString("unit"),
+                    rs.getString("patient_name"),
+                    rs.getString("card_number"),
+                    rs.getString("address"),
+                    rs.getString("sex"),
+                    rs.getString("age"),
+                    rs.getString("status")
             });
 
         }
