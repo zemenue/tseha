@@ -80,7 +80,7 @@ public class Home {
         Image image = icon.getImage(); // transform it
         Image newimg = image.getScaledInstance(10, 10, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         icon = new ImageIcon(newimg); // transform it back
-        menuItem = new JMenuItem("New Drug.", icon);
+        menuItem = new JMenuItem("Manage Drug.", icon);
         menuItem.setMnemonic(KeyEvent.VK_P);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
@@ -97,10 +97,7 @@ public class Home {
 
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Add Drug",
-                new ImageIcon("images/newfile.png"));
-        menuItem.setMnemonic(KeyEvent.VK_F);
-        menu.add(menuItem);
+
 
         ////
         menuItem = new JMenuItem("Request Drug",
@@ -184,19 +181,7 @@ public class Home {
                 }
             }
         });
-        // a submenu
-        menu.addSeparator();
-        submenu = new JMenu("Null 0");
-        submenu.setMnemonic(KeyEvent.VK_S);
 
-        menuItem = new JMenuItem("Null 1");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_2, ActionEvent.ALT_MASK));
-        submenu.add(menuItem);
-
-        menuItem = new JMenuItem("Null 2");
-        submenu.add(menuItem);
-        menu.add(submenu);
 
         ////////////////////////////////////////////////////////
         menu = new JMenu("Store");

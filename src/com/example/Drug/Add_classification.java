@@ -1,6 +1,8 @@
 package com.example.Drug;
 
 import com.example.Data.Query;
+import com.example.functions.Dialogs;
+import com.example.functions.Functions;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,6 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Add_classification {
+    Dialogs dialog = new Dialogs();
+    Functions function = new Functions();
+    Query query = new Query();
+
     public JInternalFrame addclassification() throws SQLException {
         Font font = new Font("SansSerif", Font.BOLD, 14);
         int m = 0;
@@ -101,24 +107,48 @@ public class Add_classification {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    int row = table.getSelectedRow();
+                    if (Save.getText().equals("Save")) {
 
-                    Query query = new Query();
-                    query.insert("INSERT INTO inventory.classification (class_name,class_code)\n" +
-                            "VALUES('" + class_name.getText() + "', '" + class_code.getText() + "')");
+                        query.insert("INSERT INTO inventory.classification (class_name,class_code)\n" +
+                                "VALUES('" + class_name.getText() + "', '" + class_code.getText() + "')");
 
-                    System.out.println("Data inserted.");
-                    tableModel.getDataVector().removeAllElements();
-                    tableModel.fireTableDataChanged();
-                    ResultSet rs = query.retrieveData("SELECT * FROM classification ORDER BY class_id desc");
-                    while (rs.next()) {
-                        tableModel.insertRow(tableModel.getRowCount(), new Object[]{
-                                rs.getString("class_id"),
-                                rs.getString("class_name"),
-                                rs.getString("class_code")
+                        System.out.println("Data inserted.");
+                        tableModel.getDataVector().removeAllElements();
+                        tableModel.fireTableDataChanged();
+                        ResultSet rs = query.retrieveData("SELECT * FROM classification ORDER BY class_id desc");
+                        while (rs.next()) {
+                            tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                                    rs.getString("class_id"),
+                                    rs.getString("class_name"),
+                                    rs.getString("class_code")
 
-                        });
+                            });
 
+                        }
+                        Save.setText("Save");
+                    } else {
+                        String q = "UPDATE classification SET class_name='" + class_name.getText() + "'," +
+                                "class_code='" + class_code.getText() + "'" +
+                                " WHERE class_id=" + table.getValueAt(row, 0) + "";
+
+                        query.Delete_update(q, "Category updated successfully", "Update", "Can't Update Category", "Error", "Are you sure to update category?");
+
+                        tableModel.getDataVector().removeAllElements();
+                        tableModel.fireTableDataChanged();
+                        ResultSet rs = query.retrieveData("SELECT * FROM classification ORDER BY class_id desc");
+                        while (rs.next()) {
+                            tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                                    rs.getString("class_id"),
+                                    rs.getString("class_name"),
+                                    rs.getString("class_code")
+
+                            });
+
+                        }
+                        Save.setText("Save");
                     }
+
                 } catch (Exception err) {
                     System.out.println("error:" + err.getMessage());
                 }
@@ -131,7 +161,8 @@ public class Add_classification {
         tableModel.addColumn("Classification");
         tableModel.addColumn("Classification Code");
 
-        Query query = new Query();
+        tableModel.getDataVector().removeAllElements();
+        tableModel.fireTableDataChanged();
         ResultSet rs = query.retrieveData("SELECT * FROM classification ORDER BY class_id desc");
         while (rs.next()) {
             tableModel.insertRow(tableModel.getRowCount(), new Object[]{
@@ -142,6 +173,60 @@ public class Add_classification {
             });
 
         }
+
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu = new JPopupMenu();
+        JMenuItem menuItemUpdate = new JMenuItem("Update");
+        menuItemUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int row = table.getSelectedRow();
+                    int col = table.getSelectedColumn();
+                    ResultSet result = query.retrieveData("SELECT * FROM classification  WHERE class_id='" + table.getValueAt(row, 0) + "' ");
+                    while (result.next()) {
+                        class_name.setText(result.getString("class_name"));
+                        class_code.setText(result.getString("class_code"));
+                    }
+                    Save.setText("Update");
+                } catch (SQLException ex) {
+                    dialog.error(ex.getMessage(), "Error");
+                }
+
+            }
+        });
+        JMenuItem menuItemDelete = new JMenuItem("Delete");
+        menuItemDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = table.getSelectedRow();
+
+                query.Delete_update("DELETE FROM classification  WHERE class_id=" + table.getValueAt(row, 0) + "", "Classification Deleted."
+                        , "Delete", "Can't Delete Classification.", "Error", "Are you sure to delete Classification"
+                );
+                tableModel.getDataVector().removeAllElements();
+                tableModel.fireTableDataChanged();
+                try {
+                    ResultSet rs = query.retrieveData("SELECT * FROM classification ORDER BY class_id desc");
+                    while (rs.next()) {
+                        tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                                rs.getString("class_id"),
+                                rs.getString("class_name"),
+                                rs.getString("class_code")
+
+                        });
+
+                    }
+                } catch (SQLException ex) {
+                    dialog.error(ex.getMessage(), "Error");
+                }
+
+            }
+        });
+        popupMenu.add(menuItemUpdate);
+        popupMenu.add(menuItemDelete);
+
+        table.setComponentPopupMenu(popupMenu);
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(true);
         table.setDefaultEditor(Object.class, null);
