@@ -51,7 +51,7 @@ public class Home {
         footer.add(footer_text, BorderLayout.EAST);
        // function.check_expired_drugs();
         frame.setJMenuBar(createMenuBar());
-        frame.add(desktopPane, BorderLayout.CENTER);
+        frame.add(new JScrollPane(desktopPane) , BorderLayout.CENTER);
         frame.add(footer, BorderLayout.PAGE_END);
         frame.setSize(1000, 800);
         frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
@@ -192,13 +192,9 @@ public class Home {
            @Override
            public void actionPerformed(ActionEvent e) {
                Collect collect=new Collect();
-               try {
-                   if(collect.collect().getParent()==null){
-                       collect.collect().setVisible(true);
-                       desktopPane.add(collect.collect());
-                   }
-               } catch (SQLException ex) {
-                   throw new RuntimeException(ex);
+               if(collect.collect().getParent()==null){
+                   collect.collect().setVisible(true);
+                   desktopPane.add(collect.collect());
                }
            }
        });

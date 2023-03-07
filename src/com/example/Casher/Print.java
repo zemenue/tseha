@@ -28,7 +28,7 @@ public class Print {
         ResultSet rs = query.retrieveData("SELECT * FROM sell  WHERE  sell_id=" + id + "");
         String name = null,dosage = null, address = null, sell_id = null,card_num = null, drugname = null, status, unit = null;
         double quant = 0;
-        Double price = null;
+        Double price = 0.0;
         while (rs.next()) {
 
             sell_id = rs.getString("sell_id");
@@ -99,43 +99,18 @@ public class Print {
                 "  </tr>\n");
         double total=0;
         while (resultSet.next()){
-           ResultSet r= query.retrieveData("SELECT Drug FROM Drug WHERE Drug_name='"+drugname+"'" +
+           ResultSet r= query.retrieveData("SELECT * FROM Drug WHERE Drug_name='"+drugname+"'" +
                     "AND unit='"+ unit+"'  AND Dossage_form='"+dosage+"'");
 
             while (r.next()){
                 price=r.getDouble("single_price");
             }
             total=total+(price*quant);
-            txt.append("  <tr  style=\" text-align: right;\">\n" +
-                    "    <td >"+drugname+"</td>\n" +
-                    "    <td >"+quant+"</td>\n" +
-                    "    <td>"+price+"</td>\n" +
-                    "    <td>"+price*quant +
-                    "  </tr>\n");
+            txt.append("  <tr  style=\" text-align: right;\">\n" + "    <td >").append(drugname).append("</td>\n").append("    <td >").append(quant).append("</td>\n").append("    <td>").append(price).append("</td>\n").append("    <td>").append(price * quant).append("  </tr>\n");
         }
 
 
-        txt.append("  <tr>\n" +
-                "<td rowspan=\"3\" colspan=\"2\"> </td>" +
-                "<td   style=\" text-align: right;\">Subtotal</td>" +
-
-                "    <td>"+total+"</td>\n" +
-                "  </tr>\n" +
-                "  <tr>\n" +
-
-                "<td   style=\" text-align: right;\">Tax(15%)</td>" +
-
-                "    <td>"+(total*15)/100+"</td>\n" +
-                "  </tr>\n" +
-                "  <tr>\n" +
-
-                "<td  style=\" text-align: right;\">Total</td>" +
-
-                "    <td>"+((total*15)/100)+total+"</td>\n" +
-                "  </tr>\n" +
-
-                "</body>\n" +
-                "</html>");
+        txt.append("  <tr>\n" + "<td rowspan=\"3\" colspan=\"2\"> </td>" + "<td   style=\" text-align: right;\">Subtotal</td>" + "    <td>").append(total).append("</td>\n").append("  </tr>\n").append("  <tr>\n").append("<td   style=\" text-align: right;\">Tax(15%)</td>").append("    <td>").append((total * 15) / 100).append("</td>\n").append("  </tr>\n").append("  <tr>\n").append("<td  style=\" text-align: right;\">Total</td>").append("    <td>").append((total * 15) / 100).append(total).append("</td>\n").append("  </tr>\n").append("</body>\n").append("</html>");
         textPane1.setText(String.valueOf(txt));
         textPane1.setEditable(false); // as before
         textPane1.setBackground(null); // this is the same as a JLabel
@@ -148,13 +123,12 @@ public class Print {
         menuItemDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-                query.Delete_update("Update sell SET status='Paid'   WHERE sell_id=" + id + "", "Drug Paid."
-                        , "Sell", "Can't pay.", "Error", "Are you sure you collect rhe money"
-                );
+                    query.Delete_update("Update sell SET status='Paid'   WHERE sell_id=" + id + "", "Drug Paid."
+                            , "Sell", "Can't pay.", "Error", "Are you sure you collect rhe money"
+                    );
+                   // Collect collect=new Collect();
+                   // collect.refresh();
                 printComponenet(textPane1);
-
             }
         });
 
@@ -189,6 +163,7 @@ public class Print {
         try {
             pj.print();
         } catch (PrinterException ex) {
+
             // handle exception
         }
     }

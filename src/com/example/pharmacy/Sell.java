@@ -290,7 +290,8 @@ public class Sell {
                 dialogs.info("Data inserted", "Message");
 
                 try {
-
+                    tableModel.getDataVector().removeAllElements();
+                    tableModel.fireTableDataChanged();
                     ResultSet rs = query.retrieveData("SELECT * FROM sell ORDER BY sell_id desc");
                     while (rs.next()) {
                         tableModel.insertRow(tableModel.getRowCount(), new Object[]{

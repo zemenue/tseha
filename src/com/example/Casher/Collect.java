@@ -5,6 +5,9 @@ import com.example.functions.Dialogs;
 import com.example.functions.Functions;
 
 import javax.swing.*;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,12 +15,18 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.sun.java.accessibility.util.SwingEventMonitor.addInternalFrameListener;
+import static javafx.application.Platform.exit;
+
 public class Collect {
     Dialogs dialog = new Dialogs();
     Functions function = new Functions();
     Query query = new Query();
 
-    public JInternalFrame collect() throws SQLException {
+    public JInternalFrame collect() {
+        JInternalFrame classification = new JInternalFrame("Payment", true, true, true, true);
+
+
         Font font = new Font("SansSerif", Font.BOLD, 14);
         int m = 0;
         int txt_width = 260;
@@ -27,12 +36,6 @@ public class Collect {
         ///
         DefaultTableModel tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel);
-
-
-        //
-
-
-        JInternalFrame classification = new JInternalFrame("Payment", true, true, true, true);
         classification.setLayout(new BorderLayout());
         JPanel p_table = new JPanel();
         p_table.setLayout(new GridLayout(1, 1));
@@ -46,21 +49,25 @@ public class Collect {
         tableModel.addColumn("Patient name");
         tableModel.addColumn("status");
 
-        tableModel.getDataVector().removeAllElements();
-        tableModel.fireTableDataChanged();
-        ResultSet rs = query.retrieveData("SELECT * FROM sell  ORDER BY status,sell_id desc");
-        while (rs.next()) {
-            tableModel.insertRow(tableModel.getRowCount(), new Object[]{
-                    rs.getString("sell_id"),
-                    rs.getString("drug_id"),
-                    rs.getString("quantity"),
-                    rs.getString("unit"),
-                    rs.getString("patient_name"),
-                    rs.getString("status")
+        try {
 
-            });
+            ResultSet rs = query.retrieveData("SELECT * FROM sell  ORDER BY status,sell_id desc");
+            while (rs.next()) {
+                tableModel.insertRow(tableModel.getRowCount(), new Object[]{
+                        rs.getString("sell_id"),
+                        rs.getString("drug_id"),
+                        rs.getString("quantity"),
+                        rs.getString("unit"),
+                        rs.getString("patient_name"),
+                        rs.getString("status")
 
+                });
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
 
         JPopupMenu popupMenu = new JPopupMenu();
         popupMenu = new JPopupMenu();
@@ -71,17 +78,10 @@ public class Collect {
             public void actionPerformed(ActionEvent e) {
                 int row = table.getSelectedRow();
 
-                Print print=new Print();
                 try {
-                    print.print(Integer.parseInt(table.getValueAt(row, 0).toString()));
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-                tableModel.getDataVector().removeAllElements();
-                tableModel.fireTableDataChanged();
-                try {
-
+                    Print print = new Print();
+                    JDialog dialog1 = print.print(Integer.parseInt(table.getValueAt(row, 0).toString()));
+                    // print.print(Integer.parseInt(table.getValueAt(row, 0).toString()));
 
                     tableModel.getDataVector().removeAllElements();
                     tableModel.fireTableDataChanged();
@@ -102,7 +102,59 @@ public class Collect {
                     dialog.error(ex.getMessage(), "Error");
                 }
 
+
             }
+        });
+
+        ActionListener taskPerformer = evt -> {
+            System.out.println("Reading SMTP Info.");
+        };
+        Timer timer = new Timer(100, taskPerformer);
+        timer.setRepeats(false);
+
+
+        classification.addInternalFrameListener(new InternalFrameListener() {
+            @Override
+            public void internalFrameOpened(InternalFrameEvent e) {
+                System.out.println("starts");
+                timer.start();
+            }
+
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {
+                System.out.println("closing");
+
+                //timer.stop();
+            }
+
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                System.out.println("closed");
+
+               timer.stop();
+            }
+
+            @Override
+            public void internalFrameIconified(InternalFrameEvent e) {
+               // timer.stop();
+            }
+
+            @Override
+            public void internalFrameDeiconified(InternalFrameEvent e) {
+              //  timer.stop();
+            }
+
+            @Override
+            public void internalFrameActivated(InternalFrameEvent e) {
+
+            }
+
+            @Override
+            public void internalFrameDeactivated(InternalFrameEvent e) {
+
+            }
+
+
         });
 
         popupMenu.add(menuItemDelete);
@@ -114,7 +166,7 @@ public class Collect {
 
         p_form.setPreferredSize(new Dimension(0, 0));
         p_table.setPreferredSize(new Dimension(600, 200));
-        p_table.setVisible(true);
+
         p_form.setVisible(true);
         p_table.add(new JScrollPane(table));
         p_form.setLayout(null);
@@ -127,4 +179,5 @@ public class Collect {
 
         return classification;
     }
+
 }
